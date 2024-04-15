@@ -1,0 +1,255 @@
+﻿@using Blorc.Attributes;
+@using Humanizer
+@using Tempore.App.Models;
+@using Tempore.Client;
+@using System.Globalization
+@using Tempore.App.Components
+
+@inherits Blorc.Components.BlorcComponentBase
+
+<PageTitle>@StringLocalizer!["Shift assignments"]</PageTitle>
+
+@{
+    var items = new List<BreadcrumbItem>
+                    {
+                        new(StringLocalizer!["Home"], Routes.Home.Index),
+                        new(StringLocalizer["Time & attendance"], null, true),
+                        new(StringLocalizer["Shift assignments"], null, true),
+                    };
+}
+
+<MudBreadcrumbs Items="items" Style="margin-left: -10px" />
+
+<MudText Typo="Typo.h5">@StringLocalizer["Shift assignments"]</MudText>
+<MudText Typo="Typo.caption">@StringLocalizer["Scheduled shifts for employees are displayed."]</MudText>
+
+@if (ShiftData is not null)
+{
+    <MudGrid Class="mt-1">
+        <MudItem xs="12" md="12" lg="12" xl="12">
+            <div class="d-flex justify-center">
+                <MudIcon Icon="@Icons.Material.Filled.Schedule" Style="font-size: 4rem;" Color="Color.Success" />
+            </div>
+            <MudText Align="Align.Center" Typo="Typo.h5">@ShiftData.Name</MudText>
+        </MudItem>
+        <MudItem xs="12" md="12" lg="12" xl="12">
+            <MudExpansionPanels>
+                @if (Days is not null)
+                {
+                    <MudExpansionPanel Dense="true" DisableGutters="true" Class="mt-6">
+                        <TitleContent>
+                            <div class="d-flex">
+                                <MudIcon Icon="@Icons.Material.Filled.LockClock" class="mr-3"></MudIcon>
+                                <MudText Typo="Typo.h6" Align="Align.Center">@StringLocalizer["Timetables"]</MudText>
+                            </div>
+                        </TitleContent>
+                        <ChildContent>
+                            <MudTable @ref="_dayTable" Items="@Days" T="DayDto" Dense="true" Bordered="true" Striped="false" CustomHeader="true">
+                                <HeaderContent>
+                                    <MudTHeadRow>
+                                        <MudTh>@StringLocalizer["Day"]</MudTh>
+                                        <MudTh Style="text-align: center;">@StringLocalizer["Start time"]</MudTh>
+                                        <MudTh Style="text-align: center;">@StringLocalizer["Duration"]</MudTh>
+                                        <MudTh Style="text-align: center;">@StringLocalizer["Effective working hours"]</MudTh>
+                                    </MudTHeadRow>
+                                </HeaderContent>
+                                <RowTemplate>
+                                    <MudTd DataLabel=@StringLocalizer["Day"]>@CultureInfo.CurrentCulture.DateTimeFormat.GetDayName((DayOfWeek)(context.Index % 7)).Humanize()</MudTd>
+                                    <!-- TODO: Improve the way to color this and also the colors (palette?) -->
+                                    @if (context.Timetable is not null)
+                                    {
+                                        <MudTd DataLabel=@StringLocalizer["Start time"] Style="text-align: center;">@context.Timetable.StartTime.ToString("c")</MudTd>
+                                        <MudTd DataLabel=@StringLocalizer["Duration"] Style="text-align: center;">@context.Timetable.Duration.Humanize()</MudTd>
+                                        <MudTd DataLabel=@StringLocalizer["Effective working hours"] Style="text-align: center;">@context.Timetable.EffectiveWorkingTime.Humanize()</MudTd>
+                                    }
+                                    else
+                                    {
+                                        <MudTd DataLabel=@StringLocalizer["Start time"] Style="text-align: center; background-color: azure;" />
+                                        <MudTd DataLabel=@StringLocalizer["Duration"] Style="text-align: center; background-color: azure;" />
+                                        <MudTd DataLabel=@StringLocalizer["Effective working hours"] Style="text-align: center; background-color: azure;" />
+                                    }
+                                </RowTemplate>
+                            </MudTable>
+                        </ChildContent>
+                    </MudExpansionPanel>
+                }
+            </MudExpansionPanels>
+        </MudItem>
+    </MudGrid>
+}
+<br />
+<MudGrid Class="mt-1">
+    <MudItem xs="12" md="12" lg="12" xl="12">
+        <MudText Typo="Typo.h6">@StringLocalizer["Planned shifts"]</MudText>
+        <MudTable @ref="_scheduledShiftTable" T="ScheduledShiftOverviewDto" Dense="true" Bordered="true" Striped="true" Hover="true" ServerData="GetScheduledShiftAsync" OnRowClick="OnShiftAssignmentTableClick" SelectedItem="selectedScheduledShift" RowClassFunc="ShiftAssignmentTableRowClassFunc" CustomHeader="true">
+            <ToolBarContent>
+                <HeaderDescription Icon=@Icons.Material.Filled.Schedule ContentText=@StringLocalizer["Select a shift assignment if you want to filter employees assigned or unassigned to that shift assignment."] />
+                <MudSpacer />
+                @if (IsScheduleDaysProcessRunning)
+                {
+                    <MudProgressCircular Class="ms-n1 me-1" Size="Size.Small" Indeterminate="true"/>
+                }
+                <MudToggleIconButton Icon="@Icons.Material.Filled.FilterListOff" ToggledIcon="@Icons.Material.Filled.FilterList" Class="ml-5" @bind-Toggled="IsScheduledShiftFilterEnabled" />
+                <MudMenu AnchorOrigin="Origin.BottomRight" Icon="@Icons.Material.Filled.MoreVert" Dense="true">
+                    <MudMenuItem OnClick="RefreshShiftAssignmentAsync" IconSize="Size.Small" Icon="@Icons.Material.Filled.Refresh">
+                        @StringLocalizer["Refresh"]
+                    </MudMenuItem>
+                </MudMenu>
+            </ToolBarContent>
+            <HeaderContent>
+                @if (IsScheduledShiftFilterEnabled)
+                {
+                    <MudTHeadRow IgnoreCheckbox="true" Style="background-color: #F0F0F0">
+                        <MudTh colspan="1">
+                            <MudDatePicker ImmediateText="true" Editable="true" @bind-Date="StartDate" Label="@StringLocalizer!["Start date"]" Clearable="true" />
+                        </MudTh>
+
+                        <MudTh colspan="1">
+                            <MudDatePicker ImmediateText="true" Editable="true" @bind-Date="ExpireDate" Label="@StringLocalizer!["Expire date"]" Clearable="true" />
+                        </MudTh>
+
+                        <MudTh colspan="3">
+                            <MudNumericField Immediate="true" Label="@StringLocalizer!["Effective working time"]" @bind-Value="EffectiveWorkingHours" Variant="Variant.Text" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Schedule" AdornmentColor="Color.Default"
+                                             Format="N2" Culture="CultureInfo.InvariantCulture" Clearable="true" />
+                        </MudTh>
+                    </MudTHeadRow>
+                }
+
+                <MudTHeadRow IsCheckable="true">
+                    <MudTh>@StringLocalizer["From"]</MudTh>
+                    <MudTh>@StringLocalizer["Expires"]</MudTh>
+                    <MudTh Style="text-align: center;">@StringLocalizer["Effective working hours"]</MudTh>
+                    <MudTh Style="text-align: center;">@StringLocalizer["Employees count"]</MudTh>
+                    <MudTh></MudTh>
+                </MudTHeadRow>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel=@StringLocalizer["From"]>@context!.StartDate.ToString("D")</MudTd>
+                <MudTd DataLabel=@StringLocalizer["Expires"]>@context!.ExpireDate.ToString("D")</MudTd>
+                <MudTd DataLabel=@StringLocalizer["Effective working hours"] Style="text-align: center;">@context!.EffectiveWorkingTime.TotalHours</MudTd>
+                <MudTd DataLabel=@StringLocalizer["Employees count"] Style="text-align: center;">@context!.EmployeesCount</MudTd>
+                <MudTd DataLabel=@StringLocalizer["Action"] Style="text-align: end;" Class="pe-2">
+                    <MudStack Row="true" Justify="Justify.FlexEnd" AlignItems="AlignItems.Center">
+                        <MudButton OnClick="@(() => ScheduleDaysAsync(context, false))" DisableElevation Variant="Variant.Filled" Size="Size.Small" StartIcon="@Icons.Material.Filled.ScheduleSend" Disabled="IsScheduleDaysProcessRunning" Style="white-space: nowrap" Color="Color.Success">
+                            <MudText Typo="Typo.button">@StringLocalizer["Schedule days"]</MudText>
+                        </MudButton>
+                        <MudMenu AnchorOrigin="Origin.BottomRight" Icon="@Icons.Material.Filled.MoreVert" Dense="true" Disabled="IsScheduleDaysProcessRunning">
+                            <MudMenuItem Icon="@Icons.Material.Filled.ScheduleSend" IconSize="Size.Small" OnClick="@(() => ScheduleDaysAsync(context, true))">
+                                @StringLocalizer["Schedule days (override)"]
+                            </MudMenuItem>
+                            <MudMenuItem Icon="@Icons.Material.Filled.Calculate" IconSize="Size.Small" OnClick=@(() => NavigateToComputeMetrics(context.StartDate, context.ExpireDate))>
+                                @StringLocalizer["Compute metrics"]
+                            </MudMenuItem>
+                        </MudMenu>
+                    </MudStack>
+                </MudTd>
+            </RowTemplate>
+            <PagerContent>
+                <MudTablePager HideRowsPerPage="true" InfoFormat="{first_item}-{last_item} / {all_items}" />
+            </PagerContent>
+        </MudTable>
+    </MudItem>
+    <MudItem xs="12" md="12" lg="12" xl="12">
+        <MudText Typo="Typo.h6">@StringLocalizer["Employees"]</MudText>
+
+        <MudTable @ref="_scheduledShiftEmployeesTable" T="ScheduledShiftEmployeeDto" Bordered="true" Striped="true" Hover="true" ServerData="GetEmployeesFromShiftAssignmentsAsync" @bind-SelectedItems="selectedScheduledShiftEmployees" MultiSelection="true" SelectOnRowClick="true" RowClassFunc="EmployeeFromShiftAssignmentTableRowClassFunc" CustomHeader="true">
+            <ToolBarContent>
+                @if (selectedScheduledShift is not null)
+                {
+                    <HeaderDescription Icon=@Icons.Material.Filled.Schedule ContentText=@StringLocalizer["Shift planning has been selected {0} ⇒ {1} with effective working time of {2} hours. Select at least one employee in case you want to assign them to a shift.", selectedScheduledShift.StartDate.ToString("D"), selectedScheduledShift.ExpireDate.ToString("D"), selectedScheduledShift.EffectiveWorkingTime.TotalHours] />
+                }
+                else
+                {
+                    <HeaderDescription Icon=@Icons.Material.Filled.People ContentText=@StringLocalizer["Select at least one employee in case you want to assign them to a shift."] />
+                }
+                <MudSpacer />
+                @if (!IsAssignActionDisabled)
+                {
+                    <MudButton OnClick="AssignEmployeesToShift" DisableElevation Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Style="min-width: 200px">
+                        @if (selectedScheduledShift is not null)
+                        {
+                            @StringLocalizer["Assign"]
+                        }
+                        else
+                        {
+                            @StringLocalizer["Create"]
+                        }
+                    </MudButton>
+                }
+                <MudToggleIconButton Icon="@Icons.Material.Filled.FilterListOff" ToggledIcon="@Icons.Material.Filled.FilterList" Class="ml-5" @bind-Toggled="IsFilterEmployeeFromShiftAssignmentEnabled" />
+                <MudMenu AnchorOrigin="Origin.BottomRight" Icon="@Icons.Material.Filled.MoreVert" Dense="true">
+                    <MudMenuItem OnClick="RefreshEmployeeFromShiftAssignmentAsync" IconSize="Size.Small" Icon="@Icons.Material.Filled.Refresh">
+                        @StringLocalizer["Refresh"]
+                    </MudMenuItem>
+                </MudMenu>
+            </ToolBarContent>
+            <HeaderContent>
+                @if (IsFilterEmployeeFromShiftAssignmentEnabled)
+                {
+                    <MudTHeadRow IgnoreCheckbox="true" Style="background-color: #F0F0F0">
+                        <MudTh colspan="2">
+                            <MudTextField @bind-Value="SearchTextEmployee" Placeholder="@StringLocalizer["Filter by keyword"]" Variant="Variant.Text" AdornmentIcon="@Icons.Material.Filled.FilterList" IconSize="Size.Small" Adornment="Adornment.Start" Immediate="true" Clearable="true" />
+                        </MudTh>
+                        <MudTh colspan="1">
+                            <MudSelect Style="width: 170px !important;" @bind-Value="ScheduledShiftEmployeeAssignmentStatus" Placeholder="@StringLocalizer["Select state"]" Clearable="true">
+                                @foreach (var state in EmployeeScheduledShiftAssignmentState.All)
+                                {
+                                    <MudSelectItem Value="@state.Value">@StringLocalizer[state.Text]</MudSelectItem>
+                                }
+                            </MudSelect>
+                        </MudTh>
+                    </MudTHeadRow>
+                }
+
+                <MudTHeadRow IsCheckable="true">
+                    <MudTh Style="width: 100%">@StringLocalizer["Name"]</MudTh>
+                    @if (selectedScheduledShift is not null || IsFilterEmployeeFromShiftAssignmentEnabled)
+                    {
+                        <MudTh>@StringLocalizer["Assigned"]</MudTh>
+                    }
+                    else
+                    {
+                        <MudTh></MudTh>
+                    }
+                </MudTHeadRow>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel=@StringLocalizer["Name"]>
+                    @context.FullName
+                </MudTd>
+                @if (selectedScheduledShift is not null || IsFilterEmployeeFromShiftAssignmentEnabled)
+                {
+                    <MudTd DataLabel=@StringLocalizer["Assigned"]>
+                        @if (context.IsAssigned)
+                        {
+                            <MudChip Size="Size.Small" Icon="@Icons.Material.Filled.CheckCircle" Style="margin-left: 0px;" Label="true" Color="Color.Success">@StringLocalizer["Yes"]</MudChip>
+                        }
+                        else
+                        {
+                            <MudChip Size="Size.Small" Icon="@Icons.Material.Filled.Cancel" Style="margin-left: 0px;" Label="true" Color="Color.Error">@StringLocalizer["Not"]</MudChip>
+                        }
+                    </MudTd>
+                }
+                else
+                {
+                    <MudTd></MudTd>
+                }
+            </RowTemplate>
+            <PagerContent>
+                <MudTablePager InfoFormat="{first_item}-{last_item} / {all_items}" RowsPerPageString="" />
+            </PagerContent>
+        </MudTable>
+    </MudItem>
+</MudGrid>
+
+@code
+{
+    [InjectComponentService(nameof(ScheduledShiftEmployeeTableComponentService))]
+    private MudTable<ScheduledShiftEmployeeDto>? _scheduledShiftEmployeesTable;
+
+    [InjectComponentService(nameof(ScheduledShiftOverviewTableComponentService))]
+    private MudTable<ScheduledShiftOverviewDto>? _scheduledShiftTable;
+
+    [InjectComponentService(nameof(DayTableComponentService))]
+    private MudTable<DayDto>? _dayTable;
+}

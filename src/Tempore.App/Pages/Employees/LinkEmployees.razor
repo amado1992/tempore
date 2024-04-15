@@ -1,0 +1,199 @@
+﻿@using Blorc.Attributes;
+@using Microsoft.AspNetCore.Authorization;
+@using Tempore.App.Models
+@using Tempore.Authorization.Roles;
+@using Tempore.Client;
+@using Tempore.App.Components
+
+@attribute [Authorize(Policy = Roles.Employees.Linker)]
+
+@inherits Blorc.Components.BlorcComponentBase
+
+<PageTitle>@StringLocalizer!["Link employees"]</PageTitle>
+
+@{
+    var items = new List<BreadcrumbItem>
+                    {
+                        new(StringLocalizer!["Home"], Routes.Home.Index),
+                        new(StringLocalizer["Employees"], null, true),
+                        new(StringLocalizer["Link employees"], null, true),
+                    };
+}
+
+<MudBreadcrumbs Items="items" Style="margin-left: -10px" />
+
+<MudText Typo="Typo.h5">@StringLocalizer["Link employees"]</MudText>
+<MudText Typo="Typo.caption">@StringLocalizer["Shows a list of employees"]</MudText>
+
+<MudGrid Class="my-4">
+    <MudItem xs="12" md="12" lg="12" xl="12">
+        <MudText Typo="Typo.h6">@StringLocalizer["Employees from devices"]</MudText>
+        <MudTable @ref="_employeesFromDevicesTable" T="EmployeeFromDeviceDto" Dense="true" Bordered="true" Striped="true" Hover="true" ServerData="GetEmployeesFromDevicesAsync" @bind-SelectedItems="selectedEmployeesFromDevices" MultiSelection="true" SelectOnRowClick="true" RowClassFunc="EmployeeFromDeviceTableRowClassFunc" CustomHeader="true">
+            <ToolBarContent>
+                <HeaderDescription Icon=@Icons.Material.Filled.People ContentText=@StringLocalizer["Select at least one employee."] />
+                <MudSpacer/>
+
+                @if (!IsLinkActionDisabled)
+                {
+                    <MudButton OnClick="LinkAsync" DisableElevation Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.AddLink" Class="mr-5" Color="Color.Primary">
+                        @StringLocalizer["Link"]
+                    </MudButton>
+                }
+
+                @if (!IsUnlinkActionDisabled)
+                {
+                    <MudButton OnClick="UnlinkAsync" DisableElevation Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.AddLink" Class="mr-5" Color="Color.Warning">
+                        @StringLocalizer["Unlink"]
+                    </MudButton>
+                }
+
+                @if (CountEmployeesFromDevices > 0)
+                {
+                    <MudButton OnClick="AutoLinkAsync" DisableElevation Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Link" Disabled="@IsLinkEmployeesProcessRunning">
+                        @if (IsLinkEmployeesProcessRunning)
+                        {
+                            <MudProgressCircular Class="ms-n1 me-1" Size="Size.Small" Indeterminate="true"/>
+                            <MudText Typo="Typo.button">@StringLocalizer["Linking"]</MudText>
+                        }
+                        else
+                        {
+                            <MudText Typo="Typo.button">@StringLocalizer["Autolink"]</MudText>
+                        }
+                    </MudButton>
+                }
+                <MudToggleIconButton Icon="@Icons.Material.Filled.FilterListOff" ToggledIcon="@Icons.Material.Filled.FilterList" Class="ml-5" @bind-Toggled="IsFilterEmployeesFromDevicesEnabled"/>
+                <MudMenu AnchorOrigin="Origin.BottomRight" Icon="@Icons.Material.Filled.MoreVert" Dense="true">
+                    <MudMenuItem OnClick="RefreshEmployeesFromDevicesAsync" IconSize="Size.Small" Icon="@Icons.Material.Filled.Refresh">
+                        @StringLocalizer["Refresh"]
+                    </MudMenuItem>
+                </MudMenu>
+            </ToolBarContent>
+            <HeaderContent>
+                @if (IsFilterEmployeesFromDevicesEnabled)
+                {
+                    <MudTHeadRow IgnoreCheckbox="true" Style="background-color: #F0F0F0">
+                        <MudTh colspan="3">
+                            <MudTextField @bind-Value="SearchTextEmployeeFromDevice" Placeholder="@StringLocalizer["Filter by keyword"]" Variant="Variant.Text" AdornmentIcon="@Icons.Material.Filled.FilterList" IconSize="Size.Small" Adornment="Adornment.Start" Immediate="true" Clearable="true"/>
+                        </MudTh>
+                        <MudTh colspan="1">
+                            <MudSelect @bind-Value="EmployeeFromDevicesLinkedStatus" Placeholder="@StringLocalizer["Select state"]" Clearable="true">
+                                @foreach (var state in EmployeeFromDeviceLinkState.All)
+                                {
+                                    <MudSelectItem Value="@state.Value">@StringLocalizer[state.Text]</MudSelectItem>
+                                }
+                            </MudSelect>
+                        </MudTh>
+                        <MudTh colspan="2">
+                            <MudSelect @bind-Value="EmployeeFromDevicesDeviceId" Placeholder="@StringLocalizer["Select device"]" Clearable="true">
+                                @foreach (var device in Devices!)
+                                {
+                                    <MudSelectItem Value="@device?.Id">@device!.Name</MudSelectItem>
+                                }
+                            </MudSelect>
+                        </MudTh>
+                    </MudTHeadRow>
+                }
+
+                <MudTHeadRow IsCheckable="true">
+                    <MudTh>@StringLocalizer["Code"]</MudTh>
+                    <MudTh>@StringLocalizer["Name"]</MudTh>
+                    <MudTh>@StringLocalizer["State"]</MudTh>
+                    <MudTh>@StringLocalizer["Device"]</MudTh>
+                    <MudTh></MudTh>
+                </MudTHeadRow>
+            </HeaderContent>
+
+            <RowTemplate>
+                <MudTd DataLabel=@StringLocalizer["Code"]>@context.EmployeeIdOnDevice</MudTd>
+                <MudTd DataLabel=@StringLocalizer["Name"]>
+                    @context.FullName
+                </MudTd>
+                <MudTd DataLabel=@StringLocalizer["State"]>
+                    @* TODO: Extract component for this? *@
+                    @if (context.EmployeeId is not null)
+                    {
+                        <MudChip Style="margin-left: 0px;" Label="true" Color="Color.Success">@StringLocalizer["Linked"]</MudChip>
+                    }
+                    else
+                    {
+                        <MudChip Style="margin-left: 0px;" Label="true" Color="Color.Error">@StringLocalizer["Unlinked"]</MudChip>
+                    }
+                </MudTd>
+                <MudTd DataLabel=@StringLocalizer["Device"]>
+                    @context.Device.Name
+                </MudTd>
+                <MudTd DataLabel=@StringLocalizer["Actions"] Style="text-align: end;" Class="pe-2">
+                    <MudStack Row="true" Justify="Justify.FlexEnd" AlignItems="AlignItems.Center">
+                        <MudButton OnClick="@(() => EmployeeDetails(context))" DisableElevation Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Preview" Disabled="@(IsLinkEmployeesProcessRunning || context.EmployeeId is null)" Size="Size.Small">
+                            @StringLocalizer["Details"]
+                        </MudButton>
+                        <MudMenu AnchorOrigin="Origin.BottomRight" Icon="@Icons.Material.Filled.MoreVert" Dense="true">
+                            <MudMenuItem OnClick="@(() => UnLinkAsync(context))" Icon="@Icons.Material.Filled.LinkOff" IconSize="Size.Small" Disabled="context.EmployeeId is null">
+                                @StringLocalizer["Unlink"]
+                            </MudMenuItem>
+                        </MudMenu>
+                    </MudStack>
+                </MudTd>
+            </RowTemplate>
+            <PagerContent>
+                <MudTablePager HideRowsPerPage="true" InfoFormat="{first_item}-{last_item} / {all_items}" />
+            </PagerContent>
+        </MudTable>
+    </MudItem>
+
+    <MudItem xs="12" md="12" lg="12" xl="12">
+        <MudText Typo="Typo.h6">@StringLocalizer["Employees"]</MudText>
+        <MudTable @ref="_employeesTable" T="EmployeeDto" Dense="true" Bordered="true" Striped="true" Hover="true" ServerData="GetEmployeesAsync" OnRowClick="OnEmployeeTableClick" SelectedItem="selectedEmployee" RowClassFunc="EmployeeTableRowClassFunc" CustomHeader="true">
+            <ToolBarContent>
+                <HeaderDescription Icon=@Icons.Material.Filled.Person ContentText=@StringLocalizer["Select an employee."] />
+                <MudSpacer/>
+                <MudToggleIconButton Icon="@Icons.Material.Filled.FilterListOff" ToggledIcon="@Icons.Material.Filled.FilterList" Class="ml-5" @bind-Toggled="IsFilterEmployeesEnabled"/>
+                <MudMenu AnchorOrigin="Origin.BottomRight" Icon="@Icons.Material.Filled.MoreVert" Dense="true">
+                    <MudMenuItem OnClick="RefreshEmployeesAsync">
+                        @StringLocalizer["Refresh"]
+                    </MudMenuItem>
+                </MudMenu>
+            </ToolBarContent>
+            <HeaderContent>
+                @if (IsFilterEmployeesEnabled)
+                {
+                    <MudTHeadRow IgnoreCheckbox="true" Style="background-color: #F0F0F0">
+                        <MudTh colspan="4">
+                            <MudTextField @bind-Value="SearchTextEmployee" Placeholder="@StringLocalizer["Filter by keyword"]" Variant="Variant.Text" AdornmentIcon="@Icons.Material.Filled.FilterList" IconSize="Size.Small" Adornment="Adornment.Start" Immediate="true" Clearable="true"/>
+                        </MudTh>
+                    </MudTHeadRow>
+                }
+
+                <MudTHeadRow IsCheckable="true">
+                    <MudTh>@StringLocalizer["Code"]</MudTh>
+                    <MudTh>@StringLocalizer["Name"]</MudTh>
+                    <MudTh></MudTh>
+                </MudTHeadRow>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel=@StringLocalizer["Code"]>@context.ExternalId</MudTd>
+                <MudTd DataLabel=@StringLocalizer["Name"]>@context.FullName</MudTd>
+                <MudTd DataLabel=@StringLocalizer["Actions"] Style="text-align: end;" Class="pe-2">
+                    <MudStack Row="true" Justify="Justify.FlexEnd" AlignItems="AlignItems.Center">
+                        <MudButton OnClick="@(() => ViewEmployeeDetails(context))" DisableElevation Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Preview" Size="Size.Small" Style="vertical-align: text-bottom;" Color="Color.Success">
+                            @StringLocalizer["Details"]
+                        </MudButton>
+                        <MudMenu AnchorOrigin="Origin.BottomRight" Icon="@Icons.Material.Filled.MoreVert" Dense="true" Disabled="true"/>
+                    </MudStack>
+                </MudTd>
+            </RowTemplate>
+            <PagerContent>
+                <MudTablePager HideRowsPerPage="true" InfoFormat="{first_item}-{last_item} / {all_items}" />
+            </PagerContent>
+        </MudTable>
+    </MudItem>
+</MudGrid>
+
+@code
+{
+    [InjectComponentService(nameof(EmployeesTableComponentService))]
+    private MudTable<EmployeeDto>? _employeesTable;
+
+    [InjectComponentService(nameof(EmployeesFromDevicesTableComponentService))]
+    private MudTable<EmployeeFromDeviceDto>? _employeesFromDevicesTable;
+}

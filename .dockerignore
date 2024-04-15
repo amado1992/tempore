@@ -1,0 +1,9 @@
+**/bin
+**/obj
+tools
+output
+.git
+.vscode
+src/.vs
+**/TestResults
+TestResults.trx

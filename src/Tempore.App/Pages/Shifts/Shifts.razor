@@ -1,0 +1,80 @@
+﻿@using Blorc.Attributes;
+@using Microsoft.AspNetCore.Authorization;
+@using Tempore.App.Models
+@using Tempore.Authorization.Roles;
+@using Tempore.Client;
+
+@attribute [Authorize(Policy = Roles.Employees.Linker)]
+
+@inherits Blorc.Components.BlorcComponentBase
+@using Tempore.App.Components
+
+<PageTitle>@StringLocalizer!["Shifts"]</PageTitle>
+
+@{
+    var items = new List<BreadcrumbItem>
+                    {
+                        new(StringLocalizer!["Home"], Routes.Home.Index),
+                        new(StringLocalizer["Time & Attendance"], null, true),
+                        new(StringLocalizer["Shifts"], null, true),
+                    };
+}
+
+<MudBreadcrumbs Items="items" Style="margin-left: -10px" />
+
+<MudText Typo="Typo.h5">@StringLocalizer["Shifts"]</MudText>
+<MudText Typo="Typo.caption">@StringLocalizer["Shows a list of shifts."]</MudText>
+
+<MudGrid>
+    <MudItem xs="12" md="12" lg="12" xl="12">
+        <MudTable @ref="_shiftsTable" T="ShiftDto" Dense="true" Bordered="true" Striped="true" Class="my-4" Hover="true" ServerData="GetShiftsAsync" CustomHeader="true">
+            <ToolBarContent>
+                 <HeaderDescription Icon=@Icons.Material.Filled.Schedule ContentText=@StringLocalizer["Select shift to configure."] />
+                <MudSpacer/>
+                <MudToggleIconButton Icon="@Icons.Material.Filled.FilterListOff" ToggledIcon="@Icons.Material.Filled.FilterList" Class="ml-5" @bind-Toggled="IsFilterEnabled"/>
+                <MudMenu AnchorOrigin="Origin.BottomRight" Icon="@Icons.Material.Filled.MoreVert" Dense="true">
+                    <MudMenuItem OnClick="RefreshShiftsAsync" IconSize="Size.Small" Icon="@Icons.Material.Filled.Refresh">
+                        @StringLocalizer["Refresh"]
+                    </MudMenuItem>
+                </MudMenu>
+            </ToolBarContent>
+            <HeaderContent>
+               @if (IsFilterEnabled)
+                {
+                    <MudTHeadRow Style="background-color: #F0F0F0">
+                        <MudTh colspan="2">
+                            <MudTextField @bind-Value="SearchText" Placeholder="@StringLocalizer["Filter by keyword"]" Variant="Variant.Text" AdornmentIcon="@Icons.Material.Filled.FilterList" IconSize="Size.Small" Adornment="Adornment.Start" Immediate="true" Clearable="true"/>
+                        </MudTh>
+
+                    </MudTHeadRow>
+                }
+
+                <MudTHeadRow>
+                    <MudTh>@StringLocalizer["Name"]</MudTh>
+                    <MudTh></MudTh>
+                </MudTHeadRow>
+            </HeaderContent>
+
+            <RowTemplate>
+                <MudTd DataLabel=@StringLocalizer["Name"]>
+                    @context.Name
+                </MudTd>
+                <MudTd DataLabel=@StringLocalizer["Actions"] Style="text-align: end;" Class="pe-2">
+                    <MudButton OnClick="@(() => ShiftAssignment(context))" DisableElevation Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Schedule" Size="Size.Small" Style="vertical-align: text-bottom;" Color="Color.Success">
+                        @StringLocalizer["Shift assignment"]
+                    </MudButton>
+                </MudTd>
+            </RowTemplate>
+
+            <PagerContent>
+                <MudTablePager HideRowsPerPage="true" InfoFormat="{first_item}-{last_item} / {all_items}" />
+            </PagerContent>
+        </MudTable>
+    </MudItem>
+</MudGrid>
+
+@code
+{
+    [InjectComponentService(nameof(ShiftsTableComponentService))]
+    private MudTable<ShiftDto>? _shiftsTable;
+}

@@ -1,0 +1,42 @@
+﻿@using Microsoft.AspNetCore.Authorization;
+@using Tempore.Authorization.Roles;
+
+@attribute [Authorize(Policy = Roles.Agents.Operator)]
+@inherits Blorc.Components.BlorcComponentBase
+
+<PageTitle>@StringLocalizer!["Upload timestamps"]</PageTitle>
+
+@{
+    var items = new List<BreadcrumbItem>
+                    {
+                        new(StringLocalizer!["Home"], Routes.Home.Index),
+                        new(StringLocalizer["Time & Attendance"], null, true),
+                        new(StringLocalizer["Upload timestamps"], null, true),
+                    };
+}
+
+<MudBreadcrumbs Items="items" Style="margin-left: -10px" />
+
+<MudText Typo="Typo.h6">@StringLocalizer["Upload timestamps"]</MudText>
+<MudText Typo="Typo.caption">@StringLocalizer["Upload timestamps of employees from devices"]</MudText>
+
+<MudGrid Class="mt-2">
+    <MudItem xs="12" Class="d-flex flex-row-reverse flex-grow-1 gap-4">
+        <MudButton OnClick="UploadTimestampsAsync" DisableElevation Variant="Variant.Filled" Color="Color.Info" Size="Size.Small" Target="_blank" StartIcon="@Icons.Material.Filled.Upload">
+            @StringLocalizer["Upload"]
+        </MudButton>
+    </MudItem>
+    <MudItem xs="6">
+        <MudStack>
+            <MudInputLabel>@StringLocalizer["Select devices"]</MudInputLabel>
+            <MudTreeView T="TreeItem" MultiSelection="true" ServerData="LoadServerData" Items="Items" @bind-SelectedValues="SelectedItems" ExpandOnClick="true">
+                <ItemTemplate>
+                    <MudTreeViewItem Value="@context" Icon="@context.Icon" LoadingIconColor="Color.Info" CanExpand="@context.CanExpand" Text="@context.Title" @bind-Selected="@context.Selected"/>
+                </ItemTemplate>
+            </MudTreeView>
+        </MudStack>
+    </MudItem>
+    <MudItem xs="6">
+        <MudDateRangePicker Label=@StringLocalizer["Select a date rage"] @bind-DateRange="selectedDateRange"/>
+    </MudItem>
+</MudGrid>

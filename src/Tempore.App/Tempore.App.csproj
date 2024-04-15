@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Blazored.LocalStorage" Version="4.4.0" />
+		<PackageReference Include="Blorc.Core" Version="1.2.0" />
+		<PackageReference Include="Blorc.OpenIdConnect" Version="1.6.0" />
+		<PackageReference Include="FluentValidation" Version="11.8.0" />
+		<PackageReference Include="Humanizer" Version="2.14.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="6.0.24" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.24" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.24" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="6.0.24" />
+		<PackageReference Include="Microsoft.Extensions.Localization" Version="6.0.24" />
+		<PackageReference Include="MudBlazor" Version="6.10.0" />
+		<PackageReference Include="Polly" Version="7.2.4" />
+		<PackageReference Include="Toolbelt.Blazor.LoadingBar" Version="14.0.0" />
+		<PackageReference Include="TypedSignalR.Client" Version="3.4.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Tempore.Authorization\Tempore.Authorization.csproj" />
+		<ProjectReference Include="..\Tempore.Client\Tempore.Client.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Update="Pages\Employees\Employees.razor">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	  </Content>
+	</ItemGroup>
+</Project>

@@ -1,0 +1,70 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="ClosedXML" Version="0.102.1" />
+		<PackageReference Include="Coravel" Version="5.0.2" />
+		<PackageReference Include="FluentAssertions" Version="6.12.0" />
+		<PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
+		<PackageReference Include="Hellang.Middleware.ProblemDetails" Version="6.5.1" />
+		<PackageReference Include="Mapster" Version="7.4.0" />
+		<PackageReference Include="MediatR" Version="12.1.1" />
+		<PackageReference Include="MicroElements.Swashbuckle.FluentValidation" Version="5.7.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="5.1.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.24" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="6.0.24" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.24" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.24">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.4" />
+		<PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
+		<PackageReference Include="Serilog.AspNetCore" Version="6.1.0" />
+		<PackageReference Include="StoneAssemblies.EntityFrameworkCore" Version="1.0.0-alpha0018" />
+		<PackageReference Include="StoneAssemblies.Extensibility" Version="1.0.0-alpha0134" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.5.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="6.5.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Tempore.App\Tempore.App.csproj" />
+		<ProjectReference Include="..\Tempore.Authorization\Tempore.Authorization.csproj" />
+		<ProjectReference Include="..\Tempore.Common\Tempore.Common.csproj" />
+		<ProjectReference Include="..\Tempore.Configuration\Tempore.Configuration.csproj" />
+		<ProjectReference Include="..\Tempore.HealthChecks\Tempore.HealthChecks.csproj" />
+		<ProjectReference Include="..\Tempore.Keycloak\Tempore.Keycloak.csproj" />
+		<ProjectReference Include="..\Tempore.Processing.PayDay\Tempore.Processing.PayDay.csproj" />
+		<ProjectReference Include="..\Tempore.Processing\Tempore.Processing.csproj" />
+		<ProjectReference Include="..\Tempore.Storage.PostgreSQL\Tempore.Storage.PostgreSQL.csproj" />
+		<ProjectReference Include="..\Tempore.Validation\Tempore.Validation.csproj" />
+	</ItemGroup>
+
+	<Target Name="SwaggerPostBuildTarget" AfterTargets="Build">
+		<Exec Command="dotnet tool restore"></Exec>
+		<Exec Command="dotnet swagger tofile --output swagger.json $(OutputPath)$(AssemblyName).dll v1"></Exec>
+	</Target>
+
+	<!--Move this -->
+	<Target Name="Mapster" AfterTargets="AfterBuild">
+		<Exec WorkingDirectory="$(ProjectDir)" Command="dotnet tool restore" />
+		<Exec WorkingDirectory="$(ProjectDir)" Command="dotnet mapster model -a &quot;$(TargetDir)$(ProjectName).dll&quot; -o &quot;$(ProjectDir)DataTransferObjects&quot; -n &quot;Tempore.Server.DataTransferObjects&quot;" />
+		<Exec WorkingDirectory="$(ProjectDir)" Command="dotnet mapster extension -a &quot;$(TargetDir)$(ProjectName).dll&quot;" />
+		<Exec WorkingDirectory="$(ProjectDir)" Command="dotnet mapster mapper -a &quot;$(TargetDir)$(ProjectName).dll&quot;" />
+	</Target>
+
+	<ItemGroup>
+		<InternalsVisibleTo Include="Tempore.Tests" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Invokables\WorkforceMetrics\" />
+	</ItemGroup>
+</Project>

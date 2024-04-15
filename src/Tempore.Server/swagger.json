@@ -1,0 +1,4151 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Tempore API",
+    "description": "A Web API for Tempore",
+    "termsOfService": "https://tempore.io/terms",
+    "contact": {
+      "name": "Tempore Contact",
+      "url": "https://tempore.io/contact"
+    },
+    "license": {
+      "name": "Tempore License",
+      "url": "https://tempore.io/license"
+    },
+    "version": "v1"
+  },
+  "paths": {
+    "/api/v1/Agent/RegisterAgent": {
+      "post": {
+        "tags": [
+          "Agent"
+        ],
+        "operationId": "Agent_RegisterAgent",
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/AgentRegistrationRequest"
+                  }
+                ]
+              }
+            },
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/AgentRegistrationRequest"
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/AgentRegistrationRequest"
+                  }
+                ]
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/AgentRegistrationRequest"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/Agent/GetAgents": {
+      "get": {
+        "tags": [
+          "Agent"
+        ],
+        "operationId": "Agent_GetAgents",
+        "parameters": [
+          {
+            "name": "Skip",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Take",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentDtoPagedResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentDtoPagedResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentDtoPagedResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/Agent/GetAgentById": {
+      "get": {
+        "tags": [
+          "Agent"
+        ],
+        "operationId": "Agent_GetAgentById",
+        "parameters": [
+          {
+            "name": "AgentId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "minLength": 1,
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/AgentCommand/UploadEmployeesFromDevices": {
+      "post": {
+        "tags": [
+          "AgentCommand"
+        ],
+        "operationId": "AgentCommand_UploadEmployeesFromDevices",
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/UploadEmployeesFromDevicesRequest"
+                  }
+                ]
+              }
+            },
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/UploadEmployeesFromDevicesRequest"
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/UploadEmployeesFromDevicesRequest"
+                  }
+                ]
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/UploadEmployeesFromDevicesRequest"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/v1/AgentCommand/UploadTimestampsFromDevices": {
+      "post": {
+        "tags": [
+          "AgentCommand"
+        ],
+        "operationId": "AgentCommand_UploadTimestampsFromDevices",
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/UploadTimestampsFromDevicesRequest"
+                  }
+                ]
+              }
+            },
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/UploadTimestampsFromDevicesRequest"
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/UploadTimestampsFromDevicesRequest"
+                  }
+                ]
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/UploadTimestampsFromDevicesRequest"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/v1/Device/GetDevicesByAgentId": {
+      "get": {
+        "tags": [
+          "Device"
+        ],
+        "operationId": "Device_GetDevicesByAgentId",
+        "parameters": [
+          {
+            "name": "AgentId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Skip",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Take",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceDtoPagedResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceDtoPagedResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceDtoPagedResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/Device/UpdateDeviceState": {
+      "post": {
+        "tags": [
+          "Device"
+        ],
+        "operationId": "Device_UpdateDeviceState",
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/UpdateDeviceStateRequest"
+                  }
+                ]
+              }
+            },
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/UpdateDeviceStateRequest"
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/UpdateDeviceStateRequest"
+                  }
+                ]
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/UpdateDeviceStateRequest"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/v1/Device/GetAllDevices": {
+      "get": {
+        "tags": [
+          "Device"
+        ],
+        "operationId": "Device_GetAllDevices",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DeviceDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DeviceDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DeviceDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/Employee/AddEmployeeFromDevice": {
+      "post": {
+        "tags": [
+          "Employee"
+        ],
+        "operationId": "Employee_AddEmployeeFromDevice",
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/AddEmployeeFromDeviceRequest"
+                  }
+                ]
+              }
+            },
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/AddEmployeeFromDeviceRequest"
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/AddEmployeeFromDeviceRequest"
+                  }
+                ]
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/AddEmployeeFromDeviceRequest"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/Employee/GetEmployeesFromDevices": {
+      "post": {
+        "tags": [
+          "Employee"
+        ],
+        "operationId": "Employee_GetEmployeesFromDevices",
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/GetEmployeesFromDevicesRequest"
+                  }
+                ]
+              }
+            },
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/GetEmployeesFromDevicesRequest"
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/GetEmployeesFromDevicesRequest"
+                  }
+                ]
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/GetEmployeesFromDevicesRequest"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeFromDeviceDtoPagedResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeFromDeviceDtoPagedResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeFromDeviceDtoPagedResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/Employee/GetEmployees": {
+      "post": {
+        "tags": [
+          "Employee"
+        ],
+        "operationId": "Employee_GetEmployees",
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/GetEmployeesRequest"
+                  }
+                ]
+              }
+            },
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/GetEmployeesRequest"
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/GetEmployeesRequest"
+                  }
+                ]
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/GetEmployeesRequest"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeDtoPagedResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeDtoPagedResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeDtoPagedResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/Employee/LinkEmployee": {
+      "post": {
+        "tags": [
+          "Employee"
+        ],
+        "operationId": "Employee_LinkEmployee",
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/EmployeeLinkRequest"
+                  }
+                ]
+              }
+            },
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/EmployeeLinkRequest"
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/EmployeeLinkRequest"
+                  }
+                ]
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/EmployeeLinkRequest"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/v1/Employee/UnlinkEmployee": {
+      "post": {
+        "tags": [
+          "Employee"
+        ],
+        "operationId": "Employee_UnlinkEmployee",
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/EmployeeUnlinkRequest"
+                  }
+                ]
+              }
+            },
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/EmployeeUnlinkRequest"
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/EmployeeUnlinkRequest"
+                  }
+                ]
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/EmployeeUnlinkRequest"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/v1/Employee/LinkEmployees": {
+      "post": {
+        "tags": [
+          "Employee"
+        ],
+        "operationId": "Employee_LinkEmployees",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/Employee/IsLinkEmployeesProcessRunning": {
+      "get": {
+        "tags": [
+          "Employee"
+        ],
+        "operationId": "Employee_IsLinkEmployeesProcessRunning",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "boolean"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/Employee/GetEmployeeById": {
+      "get": {
+        "tags": [
+          "Employee"
+        ],
+        "operationId": "Employee_GetEmployeeById",
+        "parameters": [
+          {
+            "name": "Id",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/Employee/AssignEmployeesToScheduledShift": {
+      "post": {
+        "tags": [
+          "Employee"
+        ],
+        "operationId": "Employee_AssignEmployeesToScheduledShift",
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/AssignEmployeesToScheduledShiftRequest"
+                  }
+                ]
+              }
+            },
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/AssignEmployeesToScheduledShiftRequest"
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/AssignEmployeesToScheduledShiftRequest"
+                  }
+                ]
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/AssignEmployeesToScheduledShiftRequest"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/Employee/GetEmployeeFromDeviceById": {
+      "get": {
+        "tags": [
+          "Employee"
+        ],
+        "operationId": "Employee_GetEmployeeFromDeviceById",
+        "parameters": [
+          {
+            "name": "Id",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeFromDeviceDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeFromDeviceDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeFromDeviceDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/Employee/UnAssignShiftToEmployees": {
+      "post": {
+        "tags": [
+          "Employee"
+        ],
+        "operationId": "Employee_UnAssignShiftToEmployees",
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/UnAssignShiftToEmployeesRequest"
+                  }
+                ]
+              }
+            },
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/UnAssignShiftToEmployeesRequest"
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/UnAssignShiftToEmployeesRequest"
+                  }
+                ]
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/UnAssignShiftToEmployeesRequest"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/v1/FileProcessing/UploadFile": {
+      "post": {
+        "tags": [
+          "FileProcessing"
+        ],
+        "operationId": "FileProcessing_UploadFile",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "File": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "FileType": {
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/FileType"
+                      }
+                    ]
+                  }
+                }
+              },
+              "encoding": {
+                "File": {
+                  "style": "form"
+                },
+                "FileType": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/FileProcessing/GetFileDataById": {
+      "get": {
+        "tags": [
+          "FileProcessing"
+        ],
+        "operationId": "FileProcessing_GetFileDataById",
+        "parameters": [
+          {
+            "name": "FileId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Skip",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Take",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/StringStringDictionaryPagedResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StringStringDictionaryPagedResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StringStringDictionaryPagedResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/FileProcessing/GetFileSchema": {
+      "get": {
+        "tags": [
+          "FileProcessing"
+        ],
+        "operationId": "FileProcessing_GetFileSchema",
+        "parameters": [
+          {
+            "name": "FileId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/FileProcessing/Process": {
+      "post": {
+        "tags": [
+          "FileProcessing"
+        ],
+        "operationId": "FileProcessing_Process",
+        "parameters": [
+          {
+            "name": "FileId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/v1/FileProcessing/DeleteFileExist": {
+      "post": {
+        "tags": [
+          "FileProcessing"
+        ],
+        "operationId": "FileProcessing_DeleteFileExist",
+        "parameters": [
+          {
+            "name": "FileId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/v1/FileProcessing/GetListFiles": {
+      "get": {
+        "tags": [
+          "FileProcessing"
+        ],
+        "operationId": "FileProcessing_GetListFiles",
+        "parameters": [
+          {
+            "name": "Skip",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Take",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataFileDtoPagedResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataFileDtoPagedResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataFileDtoPagedResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/FileProcessing/IsProcessingFileProcessRunning": {
+      "get": {
+        "tags": [
+          "FileProcessing"
+        ],
+        "operationId": "FileProcessing_IsProcessingFileProcessRunning",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "boolean"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ScheduledDay/ScheduleDays": {
+      "post": {
+        "tags": [
+          "ScheduledDay"
+        ],
+        "operationId": "ScheduledDay_ScheduleDays",
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ScheduleDaysRequest"
+                  }
+                ]
+              }
+            },
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ScheduleDaysRequest"
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ScheduleDaysRequest"
+                  }
+                ]
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ScheduleDaysRequest"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/v1/ScheduledDay/IsScheduleDaysProcessRunning": {
+      "get": {
+        "tags": [
+          "ScheduledDay"
+        ],
+        "operationId": "ScheduledDay_IsScheduleDaysProcessRunning",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "boolean"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ScheduledDay/AddWorkforceMetricConflictResolution": {
+      "post": {
+        "tags": [
+          "ScheduledDay"
+        ],
+        "operationId": "ScheduledDay_AddWorkforceMetricConflictResolution",
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/AddWorkforceMetricConflictResolutionRequest"
+                  }
+                ]
+              }
+            },
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/AddWorkforceMetricConflictResolutionRequest"
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/AddWorkforceMetricConflictResolutionRequest"
+                  }
+                ]
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/AddWorkforceMetricConflictResolutionRequest"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ScheduledDay/UpdateWorkforceMetricConflictResolution": {
+      "put": {
+        "tags": [
+          "ScheduledDay"
+        ],
+        "operationId": "ScheduledDay_UpdateWorkforceMetricConflictResolution",
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/UpdateWorkforceMetricConflictResolutionRequest"
+                  }
+                ]
+              }
+            },
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/UpdateWorkforceMetricConflictResolutionRequest"
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/UpdateWorkforceMetricConflictResolutionRequest"
+                  }
+                ]
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/UpdateWorkforceMetricConflictResolutionRequest"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ScheduledDay/DeleteWorkforceMetricConflictResolution": {
+      "delete": {
+        "tags": [
+          "ScheduledDay"
+        ],
+        "operationId": "ScheduledDay_DeleteWorkforceMetricConflictResolution",
+        "parameters": [
+          {
+            "name": "Id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "minLength": 1,
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/v1/ScheduledDay/GetWorkforceMetricConflictResolution": {
+      "post": {
+        "tags": [
+          "ScheduledDay"
+        ],
+        "operationId": "ScheduledDay_GetWorkforceMetricConflictResolution",
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/GetWorkforceMetricConflictResolutionsRequest"
+                  }
+                ]
+              }
+            },
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/GetWorkforceMetricConflictResolutionsRequest"
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/GetWorkforceMetricConflictResolutionsRequest"
+                  }
+                ]
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/GetWorkforceMetricConflictResolutionsRequest"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkforceMetricConflictResolutionDtoPagedResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkforceMetricConflictResolutionDtoPagedResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkforceMetricConflictResolutionDtoPagedResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/Shift/GetShifts": {
+      "post": {
+        "tags": [
+          "Shift"
+        ],
+        "operationId": "Shift_GetShifts",
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/GetShiftRequest"
+                  }
+                ]
+              }
+            },
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/GetShiftRequest"
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/GetShiftRequest"
+                  }
+                ]
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/GetShiftRequest"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShiftDtoPagedResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShiftDtoPagedResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShiftDtoPagedResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/Shift/GetShiftById": {
+      "get": {
+        "tags": [
+          "Shift"
+        ],
+        "operationId": "Shift_GetShiftById",
+        "parameters": [
+          {
+            "name": "Id",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShiftDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShiftDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShiftDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/Shift/GetScheduledShiftsByShiftId": {
+      "post": {
+        "tags": [
+          "Shift"
+        ],
+        "operationId": "Shift_GetScheduledShiftsByShiftId",
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/GetScheduledShiftByShiftIdRequest"
+                  }
+                ]
+              }
+            },
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/GetScheduledShiftByShiftIdRequest"
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/GetScheduledShiftByShiftIdRequest"
+                  }
+                ]
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/GetScheduledShiftByShiftIdRequest"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScheduledShiftOverviewDtoPagedResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScheduledShiftOverviewDtoPagedResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScheduledShiftOverviewDtoPagedResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/Shift/GetEmployeesFromScheduledShift": {
+      "post": {
+        "tags": [
+          "Shift"
+        ],
+        "operationId": "Shift_GetEmployeesFromScheduledShift",
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/GetEmployeesFromScheduledShiftRequest"
+                  }
+                ]
+              }
+            },
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/GetEmployeesFromScheduledShiftRequest"
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/GetEmployeesFromScheduledShiftRequest"
+                  }
+                ]
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/GetEmployeesFromScheduledShiftRequest"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScheduledShiftEmployeeDtoPagedResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScheduledShiftEmployeeDtoPagedResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScheduledShiftEmployeeDtoPagedResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/System/GetVersion": {
+      "get": {
+        "tags": [
+          "System"
+        ],
+        "operationId": "System_GetVersion",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/Timestamp/AddEmployeeFromDeviceTimestamp": {
+      "post": {
+        "tags": [
+          "Timestamp"
+        ],
+        "operationId": "Timestamp_AddEmployeeFromDeviceTimestamp",
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/AddEmployeeFromDeviceTimestampRequest"
+                  }
+                ]
+              }
+            },
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/AddEmployeeFromDeviceTimestampRequest"
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/AddEmployeeFromDeviceTimestampRequest"
+                  }
+                ]
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/AddEmployeeFromDeviceTimestampRequest"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/WorkforceMetric/ComputeWorkforceMetrics": {
+      "post": {
+        "tags": [
+          "WorkforceMetric"
+        ],
+        "operationId": "WorkforceMetric_ComputeWorkforceMetrics",
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ComputeWorkforceMetricsRequest"
+                  }
+                ]
+              }
+            },
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ComputeWorkforceMetricsRequest"
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ComputeWorkforceMetricsRequest"
+                  }
+                ]
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ComputeWorkforceMetricsRequest"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/WorkforceMetric/IsComputeWorkforceMetricsProcessRunning": {
+      "get": {
+        "tags": [
+          "WorkforceMetric"
+        ],
+        "operationId": "WorkforceMetric_IsComputeWorkforceMetricsProcessRunning",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "boolean"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/WorkforceMetric/GetWorkforceMetricCollections": {
+      "post": {
+        "tags": [
+          "WorkforceMetric"
+        ],
+        "operationId": "WorkforceMetric_GetWorkforceMetricCollections",
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/GetWorkforceMetricCollectionsRequest"
+                  }
+                ]
+              }
+            },
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/GetWorkforceMetricCollectionsRequest"
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/GetWorkforceMetricCollectionsRequest"
+                  }
+                ]
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/GetWorkforceMetricCollectionsRequest"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkforceMetricCollectionDtoPagedResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkforceMetricCollectionDtoPagedResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkforceMetricCollectionDtoPagedResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/WorkforceMetric/GetWorkforceMetrics": {
+      "post": {
+        "tags": [
+          "WorkforceMetric"
+        ],
+        "operationId": "WorkforceMetric_GetWorkforceMetrics",
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/GetWorkforceMetricsRequest"
+                  }
+                ]
+              }
+            },
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/GetWorkforceMetricsRequest"
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/GetWorkforceMetricsRequest"
+                  }
+                ]
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/GetWorkforceMetricsRequest"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/StringObjectDictionaryPagedResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StringObjectDictionaryPagedResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StringObjectDictionaryPagedResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/WorkforceMetric/ExportWorkforceMetrics": {
+      "post": {
+        "tags": [
+          "WorkforceMetric"
+        ],
+        "operationId": "WorkforceMetric_ExportWorkforceMetrics",
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ExportWorkforceMetricsRequest"
+                  }
+                ]
+              }
+            },
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ExportWorkforceMetricsRequest"
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ExportWorkforceMetricsRequest"
+                  }
+                ]
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ExportWorkforceMetricsRequest"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/WorkforceMetric/GetWorkforceMetricsSchema": {
+      "get": {
+        "tags": [
+          "WorkforceMetric"
+        ],
+        "operationId": "WorkforceMetric_GetWorkforceMetricsSchema",
+        "parameters": [
+          {
+            "name": "WorkforceMetricCollectionId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "minLength": 1,
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "SchemaType",
+            "in": "query",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/SchemaType"
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ColumnInfo"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ColumnInfo"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ColumnInfo"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AddEmployeeFromDeviceRequest": {
+        "required": [
+          "employee"
+        ],
+        "type": "object",
+        "properties": {
+          "employee": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/EmployeeFromDeviceDto"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "AddEmployeeFromDeviceTimestampRequest": {
+        "required": [
+          "timestamp"
+        ],
+        "type": "object",
+        "properties": {
+          "timestamp": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TimestampDto"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "AddWorkforceMetricConflictResolutionRequest": {
+        "required": [
+          "scheduledDayId",
+          "value",
+          "workforceMetricId"
+        ],
+        "type": "object",
+        "properties": {
+          "scheduledDayId": {
+            "minLength": 1,
+            "type": "string",
+            "format": "uuid"
+          },
+          "workforceMetricId": {
+            "minLength": 1,
+            "type": "string",
+            "format": "uuid"
+          },
+          "value": {
+            "minimum": 0,
+            "type": "number",
+            "format": "double"
+          },
+          "comment": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "AgentDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "state": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AgentState"
+              }
+            ]
+          },
+          "devices": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DeviceDto"
+            },
+            "nullable": true
+          },
+          "connectionId": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "AgentDtoPagedResponse": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AgentDto"
+            },
+            "nullable": true
+          },
+          "count": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AgentRegistrationDto": {
+        "required": [
+          "connectionId",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "state": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AgentState"
+              }
+            ]
+          },
+          "devices": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DeviceRegistrationDto"
+            },
+            "nullable": true
+          },
+          "connectionId": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AgentRegistrationRequest": {
+        "required": [
+          "agent"
+        ],
+        "type": "object",
+        "properties": {
+          "agent": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AgentRegistrationDto"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "AgentState": {
+        "enum": [
+          "Online",
+          "Offline"
+        ],
+        "type": "string"
+      },
+      "AssignEmployeesToScheduledShiftRequest": {
+        "required": [
+          "effectiveWorkingTime",
+          "employeeIds",
+          "expireDate",
+          "shiftId",
+          "startDate"
+        ],
+        "type": "object",
+        "properties": {
+          "employeeIds": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "minLength": 1,
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          "shiftId": {
+            "minLength": 1,
+            "type": "string",
+            "format": "uuid"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "expireDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "effectiveWorkingTime": {
+            "type": "string",
+            "format": "time-span"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ColumnInfo": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "index": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "include": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ComputeWorkforceMetricsRequest": {
+        "required": [
+          "endDate",
+          "startDate",
+          "workForceMetricCollectionIds"
+        ],
+        "type": "object",
+        "properties": {
+          "startDate": {
+            "minLength": 1,
+            "type": "string",
+            "format": "date"
+          },
+          "endDate": {
+            "minLength": 1,
+            "type": "string",
+            "format": "date"
+          },
+          "workForceMetricCollectionIds": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "minLength": 1,
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "DataFileDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "fileName": {
+            "type": "string",
+            "nullable": true
+          },
+          "data": {
+            "type": "string",
+            "format": "byte",
+            "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "fileType": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/FileType"
+              }
+            ]
+          },
+          "processingDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "processingState": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/FileProcessingState"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "DataFileDtoPagedResponse": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DataFileDto"
+            },
+            "nullable": true
+          },
+          "count": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DayDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "index": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "timetableId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "timetable": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TimetableDto"
+              }
+            ],
+            "nullable": true
+          },
+          "shiftId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "shift": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ShiftDto"
+              }
+            ],
+            "nullable": true
+          },
+          "scheduledDays": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ScheduledDayDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DeleteWorkforceMetricConflictResolutionRequest": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "minLength": 1,
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DeviceDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "deviceName": {
+            "type": "string",
+            "nullable": true
+          },
+          "model": {
+            "type": "string",
+            "nullable": true
+          },
+          "serialNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "macAddress": {
+            "type": "string",
+            "nullable": true
+          },
+          "agent": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AgentDto"
+              }
+            ],
+            "nullable": true
+          },
+          "agentId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "state": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DeviceState"
+              }
+            ]
+          },
+          "employeesFromDevices": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EmployeeFromDeviceDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DeviceDtoPagedResponse": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DeviceDto"
+            },
+            "nullable": true
+          },
+          "count": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DeviceRegistrationDto": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "deviceName": {
+            "type": "string",
+            "nullable": true
+          },
+          "model": {
+            "type": "string",
+            "nullable": true
+          },
+          "serialNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "macAddress": {
+            "type": "string",
+            "nullable": true
+          },
+          "state": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DeviceState"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "DeviceState": {
+        "enum": [
+          "Online",
+          "Offline"
+        ],
+        "type": "string"
+      },
+      "EmployeeDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "fullName": {
+            "type": "string",
+            "nullable": true
+          },
+          "externalId": {
+            "type": "string",
+            "nullable": true
+          },
+          "employeeFromDevice": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EmployeeFromDeviceDto"
+            },
+            "nullable": true
+          },
+          "identificationCard": {
+            "type": "string",
+            "nullable": true
+          },
+          "socialSecurity": {
+            "type": "string",
+            "nullable": true
+          },
+          "department": {
+            "type": "string",
+            "nullable": true
+          },
+          "costCenter": {
+            "type": "string",
+            "nullable": true
+          },
+          "admissionDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "baseHours": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          },
+          "scheduledShiftAssignments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ScheduledShiftAssignmentDto"
+            },
+            "nullable": true
+          },
+          "scheduledShifts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ScheduledShiftDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "EmployeeDtoPagedResponse": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EmployeeDto"
+            },
+            "nullable": true
+          },
+          "count": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "EmployeeFromDeviceDto": {
+        "required": [
+          "deviceId",
+          "employeeIdOnDevice",
+          "fullName"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "deviceId": {
+            "minLength": 1,
+            "type": "string",
+            "format": "uuid"
+          },
+          "device": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DeviceDto"
+              }
+            ],
+            "nullable": true
+          },
+          "employeeIdOnDevice": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "fullName": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "employeeId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "employee": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/EmployeeDto"
+              }
+            ],
+            "nullable": true
+          },
+          "isLinked": {
+            "type": "boolean"
+          },
+          "timestamps": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TimestampDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "EmployeeFromDeviceDtoPagedResponse": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EmployeeFromDeviceDto"
+            },
+            "nullable": true
+          },
+          "count": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "EmployeeLinkRequest": {
+        "required": [
+          "employeeFromDeviceIds"
+        ],
+        "type": "object",
+        "properties": {
+          "employeeFromDeviceIds": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "minLength": 1,
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          "employeeId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "EmployeeUnlinkRequest": {
+        "required": [
+          "employeeFromDeviceIds"
+        ],
+        "type": "object",
+        "properties": {
+          "employeeFromDeviceIds": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "minLength": 1,
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "EmployeesFromScheduledShiftSearchParams": {
+        "type": "object",
+        "properties": {
+          "searchText": {
+            "type": "string",
+            "nullable": true
+          },
+          "isAssigned": {
+            "type": "boolean",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ExportWorkforceMetricsRequest": {
+        "required": [
+          "endDate",
+          "startDate",
+          "workforceMetricCollectionId"
+        ],
+        "type": "object",
+        "properties": {
+          "workforceMetricCollectionId": {
+            "minLength": 1,
+            "type": "string",
+            "format": "uuid"
+          },
+          "startDate": {
+            "minLength": 1,
+            "type": "string",
+            "format": "date"
+          },
+          "endDate": {
+            "minLength": 1,
+            "type": "string",
+            "format": "date"
+          },
+          "fileFormat": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/FileFormat"
+              }
+            ]
+          },
+          "includeHeader": {
+            "type": "boolean"
+          },
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ColumnInfo"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "FileFormat": {
+        "enum": [
+          "CSV",
+          "XLS"
+        ],
+        "type": "string"
+      },
+      "FileProcessingState": {
+        "enum": [
+          "NotProcessed",
+          "Completed",
+          "Incomplete",
+          "Failed"
+        ],
+        "type": "string"
+      },
+      "FileType": {
+        "enum": [
+          "Unknown",
+          "PayDay"
+        ],
+        "type": "string"
+      },
+      "GetAgentByIdRequest": {
+        "required": [
+          "agentId"
+        ],
+        "type": "object",
+        "properties": {
+          "agentId": {
+            "minLength": 1,
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetEmployeesFromDevicesRequest": {
+        "type": "object",
+        "properties": {
+          "searchText": {
+            "type": "string",
+            "nullable": true
+          },
+          "isLinked": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "employeeId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "includeDevice": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "includeAgent": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "deviceIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "nullable": true
+          },
+          "skip": {
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          },
+          "take": {
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetEmployeesFromScheduledShiftRequest": {
+        "type": "object",
+        "properties": {
+          "scheduledShiftId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "searchParams": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/EmployeesFromScheduledShiftSearchParams"
+              }
+            ],
+            "nullable": true
+          },
+          "skip": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "take": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetEmployeesRequest": {
+        "type": "object",
+        "properties": {
+          "searchText": {
+            "type": "string",
+            "nullable": true
+          },
+          "includeShifts": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "includeShiftAssignment": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "skip": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "take": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetScheduledShiftByShiftIdRequest": {
+        "type": "object",
+        "properties": {
+          "shiftId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "searchParams": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ScheduledShiftSearchParams"
+              }
+            ],
+            "nullable": true
+          },
+          "skip": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "take": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetShiftRequest": {
+        "type": "object",
+        "properties": {
+          "searchText": {
+            "type": "string",
+            "nullable": true
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date",
+            "nullable": true
+          },
+          "skip": {
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          },
+          "take": {
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetWorkforceMetricCollectionsRequest": {
+        "type": "object",
+        "properties": {
+          "skip": {
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          },
+          "take": {
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetWorkforceMetricConflictResolutionsRequest": {
+        "required": [
+          "scheduledDayId"
+        ],
+        "type": "object",
+        "properties": {
+          "scheduledDayId": {
+            "minLength": 1,
+            "type": "string",
+            "format": "uuid"
+          },
+          "skip": {
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          },
+          "take": {
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetWorkforceMetricsRequest": {
+        "required": [
+          "endDate",
+          "startDate",
+          "workforceMetricCollectionId"
+        ],
+        "type": "object",
+        "properties": {
+          "workforceMetricCollectionId": {
+            "minLength": 1,
+            "type": "string",
+            "format": "uuid"
+          },
+          "startDate": {
+            "minLength": 1,
+            "type": "string",
+            "format": "date"
+          },
+          "endDate": {
+            "minLength": 1,
+            "type": "string",
+            "format": "date"
+          },
+          "skip": {
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          },
+          "take": {
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetWorkforceMetricsSchemaRequest": {
+        "required": [
+          "workforceMetricCollectionId"
+        ],
+        "type": "object",
+        "properties": {
+          "workforceMetricCollectionId": {
+            "minLength": 1,
+            "type": "string",
+            "format": "uuid"
+          },
+          "schemaType": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/SchemaType"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": { }
+      },
+      "ScheduleDaysRequest": {
+        "type": "object",
+        "properties": {
+          "scheduledShiftId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "force": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ScheduledDayDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "timestamps": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TimestampDto"
+            },
+            "nullable": true
+          },
+          "workforceMetricConflictResolutions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WorkforceMetricConflictResolutionDto"
+            },
+            "nullable": true
+          },
+          "scheduledShiftAssignmentId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "scheduledShiftAssignment": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ScheduledShiftAssignmentDto"
+              }
+            ],
+            "nullable": true
+          },
+          "dayId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "day": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DayDto"
+              }
+            ],
+            "nullable": true
+          },
+          "startDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "endDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "checkInStartDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "checkInEndDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "checkOutStartDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "checkOutEndDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "effectiveWorkingTime": {
+            "type": "string",
+            "format": "time-span"
+          },
+          "relativeEffectiveWorkingTime": {
+            "type": "string",
+            "format": "time-span"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ScheduledShiftAssignmentDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "employeeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "employee": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/EmployeeDto"
+              }
+            ],
+            "nullable": true
+          },
+          "scheduledShiftId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "scheduledShift": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ScheduledShiftDto"
+              }
+            ],
+            "nullable": true
+          },
+          "scheduledDays": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ScheduledDayDto"
+            },
+            "nullable": true
+          },
+          "lastGeneratedDayDate": {
+            "type": "string",
+            "format": "date",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ScheduledShiftDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "shiftId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "shift": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ShiftDto"
+              }
+            ],
+            "nullable": true
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "expireDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "effectiveWorkingTime": {
+            "type": "string",
+            "format": "time-span"
+          },
+          "scheduledShiftAssignments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ScheduledShiftAssignmentDto"
+            },
+            "nullable": true
+          },
+          "employees": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EmployeeDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ScheduledShiftEmployeeDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "fullName": {
+            "type": "string",
+            "nullable": true
+          },
+          "isAssigned": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ScheduledShiftEmployeeDtoPagedResponse": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ScheduledShiftEmployeeDto"
+            },
+            "nullable": true
+          },
+          "count": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ScheduledShiftOverviewDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "shiftId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "expireDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "effectiveWorkingTime": {
+            "type": "string",
+            "format": "time-span"
+          },
+          "employeesCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ScheduledShiftOverviewDtoPagedResponse": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ScheduledShiftOverviewDto"
+            },
+            "nullable": true
+          },
+          "count": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ScheduledShiftSearchParams": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date",
+            "nullable": true
+          },
+          "expireDate": {
+            "type": "string",
+            "format": "date",
+            "nullable": true
+          },
+          "effectiveWorkingTime": {
+            "type": "string",
+            "format": "time-span",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SchemaType": {
+        "enum": [
+          "Display",
+          "Export"
+        ],
+        "type": "string"
+      },
+      "ShiftDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "days": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DayDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ShiftDtoPagedResponse": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ShiftDto"
+            },
+            "nullable": true
+          },
+          "count": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "StringObjectDictionaryPagedResponse": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": { }
+            },
+            "nullable": true
+          },
+          "count": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "StringStringDictionaryPagedResponse": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            },
+            "nullable": true
+          },
+          "count": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TimestampDto": {
+        "required": [
+          "dateTime",
+          "employeeFromDevice"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "employeeFromDeviceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "employeeFromDevice": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/EmployeeFromDeviceDto"
+              }
+            ]
+          },
+          "dateTime": {
+            "minLength": 1,
+            "type": "string",
+            "format": "date-time"
+          },
+          "scheduledDayId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "scheduledDay": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ScheduledDayDto"
+              }
+            ],
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TimetableDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "startTime": {
+            "type": "string",
+            "format": "time-span"
+          },
+          "duration": {
+            "type": "string",
+            "format": "time-span"
+          },
+          "checkInTimeStart": {
+            "type": "string",
+            "format": "time-span"
+          },
+          "checkInTimeDuration": {
+            "type": "string",
+            "format": "time-span"
+          },
+          "checkOutTimeStart": {
+            "type": "string",
+            "format": "time-span"
+          },
+          "checkOutTimeDuration": {
+            "type": "string",
+            "format": "time-span"
+          },
+          "effectiveWorkingTime": {
+            "type": "string",
+            "format": "time-span"
+          },
+          "days": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DayDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UnAssignShiftToEmployeesRequest": {
+        "required": [
+          "shiftToEmployeeIds"
+        ],
+        "type": "object",
+        "properties": {
+          "shiftToEmployeeIds": {
+            "type": "array",
+            "items": {
+              "minLength": 1,
+              "type": "string",
+              "format": "uuid"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateDeviceStateRequest": {
+        "type": "object",
+        "properties": {
+          "deviceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "deviceState": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DeviceState"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateWorkforceMetricConflictResolutionRequest": {
+        "required": [
+          "id",
+          "value",
+          "workforceMetricId"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "minLength": 1,
+            "type": "string",
+            "format": "uuid"
+          },
+          "workforceMetricId": {
+            "minLength": 1,
+            "type": "string",
+            "format": "uuid"
+          },
+          "value": {
+            "minimum": 0,
+            "type": "number",
+            "format": "double"
+          },
+          "comment": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UploadEmployeesFromDevicesRequest": {
+        "required": [
+          "deviceIds"
+        ],
+        "type": "object",
+        "properties": {
+          "deviceIds": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "UploadTimestampsFromDevicesRequest": {
+        "required": [
+          "deviceIds"
+        ],
+        "type": "object",
+        "properties": {
+          "deviceIds": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          "from": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "to": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "WorkforceMetricCollectionDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "workforceMetrics": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WorkforceMetricDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "WorkforceMetricCollectionDtoPagedResponse": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WorkforceMetricCollectionDto"
+            },
+            "nullable": true
+          },
+          "count": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "WorkforceMetricConflictResolutionDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "scheduledDayId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "scheduledDay": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ScheduledDayDto"
+              }
+            ],
+            "nullable": true
+          },
+          "workforceMetricId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "workforceMetric": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/WorkforceMetricDto"
+              }
+            ],
+            "nullable": true
+          },
+          "value": {
+            "type": "number",
+            "format": "double"
+          },
+          "comment": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "WorkforceMetricConflictResolutionDtoPagedResponse": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WorkforceMetricConflictResolutionDto"
+            },
+            "nullable": true
+          },
+          "count": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "WorkforceMetricDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "workforceMetricCollectionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "workforceMetricCollection": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/WorkforceMetricCollectionDto"
+              }
+            ],
+            "nullable": true
+          },
+          "workforceMetricConflictResolutions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WorkforceMetricConflictResolutionDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

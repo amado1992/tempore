@@ -1,0 +1,40 @@
+﻿{
+  "$schema": "https://json.schemastore.org/launchsettings.json",
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:43723",
+      "sslPort": 44302
+    }
+  },
+  "profiles": {
+    "Tempore.Server (Tye / Postgres)": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",
+      "applicationUrl": "https://localhost:7206;",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "APP_INSTANCE": "0",
+        "TMP_CONNECTIONSTRINGS_APPLICATIONDATABASE": "User ID=sa;Password=tempore-123!;Host=localhost;Port=5002;Database=tempore;Pooling=true",
+        "TMP_IDENTITYSERVER_AUTHORITY": "http://localhost:5003/auth/realms/master",
+        "TMP_IDENTITYSERVER_USERNAME": "admin",
+        "TMP_IDENTITYSERVER_PASSWORD": "tempore-123!",
+        "TMP_IDENTITYSERVER_ALLOWUNTRUSTEDCERTIFICATES": "true",
+        "TMP_IDENTITYSERVER_APPINGRESS": "https://localhost:7206",
+        "TMP_IDENTITYSERVER_APPUSERNAME": "tempore",
+        "TMP_IDENTITYSERVER_APPPASSWORD": "tempore-123!"
+      }
+    },
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

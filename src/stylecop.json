@@ -1,0 +1,10 @@
+{
+  "settings": {
+    "documentationRules": {
+      "companyName": "Port Hope Investment S.A.",
+      "copyrightText": "Copyright © 2023 - 2023 Port Hope Investment S.A. development team. All rights reserved.",
+      "headerDecoration": "--------------------------------------------------------------------------------------------------------------------",
+      "xmlHeader": true
+    }
+  }
+}

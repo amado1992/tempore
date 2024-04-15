@@ -1,0 +1,6 @@
+﻿<MudMenu Icon="@Icons.Material.Filled.Translate" Color="Color.Inherit" Variant="@Variant.Text" DisableElevation="true">
+    @foreach (var culture in SupportedCultures)
+    {
+        <MudMenuItem OnClick="@(async e => await SetCultureAsync(culture))">@culture.DisplayName</MudMenuItem>
+    }
+</MudMenu>

@@ -1,0 +1,92 @@
+﻿@using Blorc.Attributes;
+@using Tempore.Client;
+
+@inherits Blorc.Components.BlorcComponentBase
+
+<PageTitle>@StringLocalizer!["Employee details"]</PageTitle>
+
+@{
+    var items = new List<BreadcrumbItem>
+                    {
+                        new(StringLocalizer!["Home"], Routes.Home.Index),
+                        new(StringLocalizer["Employees"], null, true),
+                        new(StringLocalizer["Employee details"], null, true),
+                    };
+}
+
+<MudBreadcrumbs Items="items" Style="margin-left: -10px" />
+<div class="d-flex justify-center">
+    <MudIcon Icon="@Icons.Material.Filled.Person" Style="font-size: 4rem;" Color="Color.Success" />
+</div>
+@if (EmployeeData is not null)
+{
+    <MudGrid>
+        <MudItem xs="12" sm="12" md="12" lg="12" xl="12">
+            <MudText Align="Align.Center" Typo="Typo.h5">@EmployeeData?.FullName</MudText>
+        </MudItem>
+        <MudItem xs="12" sm="12" md="6" lg="3" xl="3">
+            <MudText>@StringLocalizer["External Id"]: @EmployeeData?.ExternalId</MudText>
+        </MudItem>
+
+        <MudItem xs="12" sm="12" md="6" lg="3" xl="3">
+            <MudText>@StringLocalizer["Identification card"]: @EmployeeData?.IdentificationCard</MudText>
+        </MudItem>
+
+        <MudItem xs="12" sm="12" md="6" lg="3" xl="3">
+            <MudText>@StringLocalizer["Social security"]: @EmployeeData?.SocialSecurity</MudText>
+        </MudItem>
+
+        <MudItem xs="12" sm="12" md="6" lg="3" xl="3">
+            <MudText>@StringLocalizer["Department"]: @EmployeeData?.Department</MudText>
+        </MudItem>
+
+        <MudItem xs="12" sm="12" md="6" lg="3" xl="3">
+            <MudText>@StringLocalizer["Cost center"]: @EmployeeData?.CostCenter</MudText>
+        </MudItem>
+
+        <MudItem xs="12" sm="12" md="6" lg="3" xl="3">
+            <MudText>@StringLocalizer["Admission date"]: @EmployeeData?.AdmissionDate</MudText>
+        </MudItem>
+
+        <MudItem xs="12" sm="12" md="6" lg="3" xl="3">
+            <MudText>@StringLocalizer["Base hours"]: @EmployeeData?.AdmissionDate</MudText>
+        </MudItem>
+    </MudGrid>
+}
+<MudText Typo="Typo.caption">@StringLocalizer["Linked employee from devices"]</MudText>
+<MudTable @ref="_employeesFromDevicesTable" T="EmployeeFromDeviceDto" Dense="true" Bordered="true" Striped="true" Class="my-4" Hover="true" ServerData="GetEmployeesFromDevicesAsync">
+
+    <HeaderContent>
+        <MudTh>@StringLocalizer["Name"]</MudTh>
+        <MudTh>@StringLocalizer["Device"]</MudTh>
+        <MudTh>@StringLocalizer["Agent"]</MudTh>
+        <MudTh>@StringLocalizer["Actions"]</MudTh>
+    </HeaderContent>
+
+    <RowTemplate>
+        <MudTd DataLabel=@StringLocalizer["Name"]>@context.FullName</MudTd>
+        <MudTd DataLabel=@StringLocalizer["Device"]>
+            @context.Device.Name
+        </MudTd>
+        <MudTd DataLabel=@StringLocalizer["Device"]>
+            @context.Device.Agent.Name
+        </MudTd>
+        <MudTd DataLabel=@StringLocalizer["Actions"]>
+            @if (context.EmployeeId != null)
+            {
+                <MudButton OnClick="@(() => UnLinkAsync(context.Id, context.FullName))" DisableElevation Variant="Variant.Filled" Color="Color.Error" Size="Size.Small" Target="_blank" StartIcon="@Icons.Material.Filled.LinkOff">
+                    @StringLocalizer["Unlink"]
+                </MudButton>
+            }
+        </MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager HideRowsPerPage="true" InfoFormat="{first_item}-{last_item} / {all_items}" />
+    </PagerContent>
+</MudTable>
+
+@code
+{
+    [InjectComponentService(nameof(EmployeesFromDevicesTableComponentService))]
+    private MudTable<EmployeeFromDeviceDto>? _employeesFromDevicesTable;
+}

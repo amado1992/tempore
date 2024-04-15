@@ -1,0 +1,30 @@
+﻿@using Humanizer.Localisation
+@using Humanizer
+@using Blorc.Attributes
+
+@inherits Blorc.Components.BlorcComponentBase
+
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.Warning" Class="mr-3 mb-n1"/>
+            @StringLocalizer!["User inactivity detected!"]
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudText>
+            @StringLocalizer!["The user will be automatically signed out in"]
+        </MudText>
+        <MudProgressLinear Value="SignOutProgressValue" Style="height: 25px; margin-bottom: 10px" Size="Size.Large" Color="@SignOutProgressColor">
+            @RemainingTimeSpan!.Value.Humanize(2, minUnit: TimeUnit.Second)
+        </MudProgressLinear>
+    </DialogContent>
+</MudDialog>
+
+@code{
+
+    [CascadingParameter]
+    [InjectComponentService(nameof(MudMudDialogInstanceComponentService))]
+    private MudDialogInstance? DialogInstance { get; set; }
+
+}

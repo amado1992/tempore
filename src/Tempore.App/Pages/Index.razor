@@ -1,0 +1,47 @@
+﻿
+<PageTitle>@StringLocalizer?["Index"]</PageTitle>
+
+<MudGrid>
+    <MudItem xs="12" sm="12" md="6" lg="6" xl="6">
+        <MudCard>
+            <MudCardHeader>
+                <CardHeaderAvatar >
+                    <MudIcon Icon="@Icons.Material.Filled.People" Style="font-size: 4rem;" Color="Color.Primary"/>
+                </CardHeaderAvatar>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.body1"><MudLink OnClick="NavigateToEmployees">@StringLocalizer?["Employees"]</MudLink></MudText>
+                    <MudText Typo="Typo.body2" Align="Align.Justify">@StringLocalizer?["Manage the crucial information about organizations and employees. It allows for the seamless import of employee data from various sources, including devices and CSV files. With robust credential management, it ensures the security and integrity of user data."]</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+        </MudCard>
+    </MudItem>
+
+    <MudItem xs="12" sm="12" md="6" lg="6" xl="6">
+        <MudCard >
+            <MudCardHeader>
+                <CardHeaderAvatar>
+                    <MudIcon Icon="@Icons.Material.Filled.LockClock" Style="font-size: 4rem;" Color="Color.Primary" />
+                </CardHeaderAvatar>
+                <CardHeaderContent >
+                    <MudText Typo="Typo.body1"><MudLink OnClick="NavigateToTimeAttendance" Disabled="false">@StringLocalizer?["Time & attendance"]</MudLink></MudText>
+                    <MudText Typo="Typo.body2" Align="Align.Justify">@StringLocalizer?["Manage the crucial information about organizations and employees. It allows for the seamless import of employee data from various sources, including devices and CSV files. With robust credential management, it ensures the security and integrity of user data."]</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+        </MudCard>
+    </MudItem>
+
+    <MudItem xs="12" sm="12" md="6" lg="6" xl="6">
+        <MudCard>
+            <MudCardHeader>
+                <CardHeaderAvatar>
+                    <MudIcon Icon="@Icons.Material.Filled.AreaChart" Style="font-size: 4rem;" Color="Color.Primary" />
+                </CardHeaderAvatar>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.body1"><MudLink OnClick="NavigateToAnalytics" Disabled="false">@StringLocalizer?["Analytics"]</MudLink></MudText>
+                    <MudText Typo="Typo.body2" Align="Align.Justify">@StringLocalizer?["Command center for workforce metrics. It provides comprehensive analysis, reporting and data export capabilities. With this module, you can gain valuable insight into your workforce, helping you make informed decisions to improve productivity and efficiency."]</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+        </MudCard>
+    </MudItem>
+
+</MudGrid>

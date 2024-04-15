@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="ClosedXML" Version="0.102.1" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
+		<PackageReference Include="StoneAssemblies.EntityFrameworkCore" Version="1.0.0-alpha0018" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\Tempore.Common\Tempore.Common.csproj" />
+	  <ProjectReference Include="..\Tempore.Processing\Tempore.Processing.csproj" />
+	  <ProjectReference Include="..\Tempore.Storage\Tempore.Storage.csproj" />
+	</ItemGroup>
+</Project>

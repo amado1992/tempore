@@ -1,0 +1,130 @@
+﻿
+@using Tempore.Client
+@using System.Globalization
+@using Blorc.Attributes
+@using Tempore.App.Components
+
+@inherits Blorc.Components.BlorcComponentBase
+
+<PageTitle>@StringLocalizer!["Workforce metrics"]</PageTitle>
+
+@{
+    var items = new List<BreadcrumbItem>
+                    {
+                        new(StringLocalizer!["Home"], Routes.Home.Index),
+                        new(StringLocalizer["Analytics"], null, true),
+                        new(StringLocalizer["Workforce metrics"], null, true),
+                    };
+}
+
+<MudBreadcrumbs Items="items" Style="margin-left: -10px" />
+
+<MudText Typo="Typo.h5">@StringLocalizer["Workforce metrics"]</MudText>
+<MudText Typo="Typo.caption">@StringLocalizer["Displays a list of workforce metrics."]</MudText>
+
+<MudGrid Class="mt-1">
+    <MudItem xs="12" md="12" lg="12" xl="12">
+        <MudDateRangePicker Label="@StringLocalizer["Select a date rage to compute workforce metrics"]" @bind-DateRange="SelectedDateRange"></MudDateRangePicker>
+    </MudItem>
+    <MudItem xs="12" md="12" lg="12" xl="12">
+        <MudTable @ref="_workforceMetricCollectionTable" T="WorkforceMetricCollectionDto" Dense="true" Bordered="true" Striped="true" Hover="true" ServerData="GetWorkforceMetricCollectionsAsync" RowClassFunc="SelectedWorkforceMetricTableRowClassFunc" SelectOnRowClick="true" OnRowClick="OnWorkforceMetricCollectionRowClick" CustomHeader="true">
+            <ToolBarContent>
+                <HeaderDescription Icon=@Icons.Material.Filled.AreaChart ContentText=@StringLocalizer["Select workforce metric collections"] />
+                <MudSpacer />
+                @if (IsComputeWorkforceMetricsProcessRunning)
+                {
+                    <MudProgressCircular Class="ms-n1 me-1" Size="Size.Small" Indeterminate="true"/>
+                }
+                <MudToggleIconButton Icon="@Icons.Material.Filled.FilterListOff" ToggledIcon="@Icons.Material.Filled.FilterList" Class="ml-5" @bind-Toggled="IsWorkforceMetricFilterEnabled" />
+                <MudMenu AnchorOrigin="Origin.BottomRight" Icon="@Icons.Material.Filled.MoreVert" Dense="true">
+                    <MudMenuItem OnClick="RefreshWorkforceMetricCollectionAsync">
+                        @StringLocalizer["Refresh"]
+                    </MudMenuItem>
+                </MudMenu>
+            </ToolBarContent>
+            <HeaderContent>
+                <MudTHeadRow IsCheckable="true">
+                    <MudTh>@StringLocalizer["Name"]</MudTh>
+                    <MudTh></MudTh>
+                </MudTHeadRow>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel=@StringLocalizer["Name"]>@context.Name</MudTd>
+                <MudTd DataLabel=@StringLocalizer["Actions"] Style="text-align: end;" Class="pe-2">
+                    <MudStack Row="true" Justify="Justify.FlexEnd" AlignItems="AlignItems.Center">
+                        <MudButton OnClick=@(()=> ComputeWorkforceMetricsAsync(context)) DisableElevation Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Calculate" Disabled="IsComputeWorkforceMetricsProcessRunning" Color="Color.Success" Style="white-space: nowrap" >
+                            <MudText Typo="Typo.button">@StringLocalizer["Compute workforce metrics"]</MudText>
+                        </MudButton>
+                        <MudMenu AnchorOrigin="Origin.BottomRight" Icon="@Icons.Material.Filled.MoreVert" Dense="true" Disabled="true"/>
+                    </MudStack>
+                </MudTd>
+            </RowTemplate>
+            <PagerContent>
+                <MudTablePager InfoFormat="{first_item}-{last_item} / {all_items}" RowsPerPageString="" />
+            </PagerContent>
+        </MudTable>
+    </MudItem>
+    
+    @if (SelectedWorkforceMetricCollection is not null && WorkforceMetricCollectionSchema is not null && SelectedDateRange?.Start is not null && SelectedDateRange?.End is not null)
+    {
+        <MudItem xs="12" md="12" lg="12" xl="12">
+            <MudTable @ref="_workforceMetricsTable" T="IDictionary<string, object>" Dense="true" Bordered="true" Striped="true" Hover="true" ServerData="GetWorkforceMetricsAsync" CustomHeader="true" HorizontalScrollbar="true">
+                <ToolBarContent>
+                    <HeaderDescription Icon=@Icons.Material.Filled.AreaChart ContentText=@StringLocalizer["{0} workforce metrics for employees from '{1}' to '{2}'", SelectedWorkforceMetricCollection.Name, SelectedDateRange.Start.Value.ToString("D"), SelectedDateRange.End.Value.ToString("D")] />
+                    <MudSpacer />
+                    @if (IsExportingWorkforceMetrics)
+                    {
+                        <MudProgressCircular Class="ms-n1 me-1" Size="Size.Small" Indeterminate="true"/>
+                    }
+                    <MudButton OnClick="ExportWorkforceMetricsAsync" DisableElevation Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.SaveAs" Color="Color.Success" Style="white-space: nowrap" Disabled="IsExportingWorkforceMetrics">
+                        <MudText Typo="Typo.button">@StringLocalizer["Export"]</MudText>
+                    </MudButton>
+                    <MudMenu AnchorOrigin="Origin.BottomRight" Icon="@Icons.Material.Filled.MoreVert" Dense="true">
+                        <MudMenuItem OnClick="RefreshWorkforceMetricsAsync">
+                            @StringLocalizer["Refresh"]
+                        </MudMenuItem>
+                    </MudMenu>
+                </ToolBarContent>
+                <HeaderContent>
+                    <MudTHeadRow IsCheckable="false">
+                        @foreach (var columnInfo in WorkforceMetricCollectionSchema.OrderBy(info => info.Index))
+                        {
+                            <MudTh Style="white-space: nowrap;">@StringLocalizer[columnInfo.Name]</MudTh>
+                        }
+                    </MudTHeadRow>
+                </HeaderContent>
+                <RowTemplate>
+                    @foreach (var columnInfo in WorkforceMetricCollectionSchema.OrderBy(info => info.Index))
+                    {
+                        <MudTd Style="white-space: nowrap;">
+                            @if (context.TryGetValue(columnInfo.Name, out var value))
+                            {
+                                @if (value is double doubleValue)
+                                {
+                                    @doubleValue.ToString("F2")
+                                }
+                                else
+                                {
+                                    @value
+                                }
+                            }
+                        </MudTd>
+                    }
+                </RowTemplate>
+                <PagerContent>
+                    <MudTablePager InfoFormat="{first_item}-{last_item} / {all_items}" RowsPerPageString="" />
+                </PagerContent>
+            </MudTable>
+        </MudItem>
+    }
+</MudGrid>
+
+@code
+{
+    [InjectComponentService(nameof(WorkforceMetricCollectionsTableComponentService))]
+    MudTable<WorkforceMetricCollectionDto> _workforceMetricCollectionTable;
+    
+    [InjectComponentService(nameof(WorkforceMetricsTableComponentService))]
+    MudTable<IDictionary<string, object>> _workforceMetricsTable;
+
+}

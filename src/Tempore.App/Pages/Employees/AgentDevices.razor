@@ -1,0 +1,79 @@
+﻿@using Microsoft.AspNetCore.Authorization
+@using Tempore.Authorization.Roles
+@using Tempore.Client
+@using Blorc.Attributes
+@using Tempore.App.Components
+
+@attribute [Authorize(Policy = Roles.Devices.Viewer)]
+@inherits Blorc.Components.BlorcComponentBase
+
+@if (CurrentAgent is null)
+{
+    // TODO: Improve this?
+    return;
+}
+
+<PageTitle>@StringLocalizer?["Devices of Agent"]</PageTitle>
+
+@{
+    var items = new List<BreadcrumbItem>
+                    {
+                        new(StringLocalizer!["Home"], Routes.Home.Index),
+                        new(StringLocalizer["Employees"], null, true),
+                        new(StringLocalizer["Agents"], Routes.Employees.ImportFromDevices.Agents),
+                        new(StringLocalizer["Devices of Agent"] + " - " + CurrentAgent.Name, null, true)
+                    };
+}
+
+<MudBreadcrumbs Items="items" Style="margin-left: -10px" />
+
+<MudText Typo="Typo.h5">@StringLocalizer["Devices"]</MudText>
+<MudText Typo="Typo.caption">@StringLocalizer["Shows a list of available devices of an agent"]</MudText>
+
+<MudTable Dense="true" Bordered="true" Striped="true" ServerData="@GetDevicesAsync" Class="my-4" @ref="devicesTable">
+    <ToolBarContent>
+        <HeaderDescription Icon=@Icons.Material.Filled.Devices ContentText=@StringLocalizer["Devices"] />
+        <MudSpacer/>
+        <MudMenu AnchorOrigin="Origin.BottomRight" Icon="@Icons.Material.Filled.MoreVert" Dense="true">
+            <MudMenuItem OnClick="RefreshAsync" IconSize="Size.Small" Icon="@Icons.Material.Filled.Refresh">
+                @StringLocalizer["Refresh"]
+            </MudMenuItem>
+        </MudMenu>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh>@StringLocalizer["Name"]</MudTh>
+        <MudTh>@StringLocalizer["Device Name"]</MudTh>
+        <MudTh>@StringLocalizer["Model"]</MudTh>
+        <MudTh>@StringLocalizer["Serial Number"]</MudTh>
+        <MudTh>@StringLocalizer["Mac Address"]</MudTh>
+        <MudTh>@StringLocalizer["State"]</MudTh>
+        <MudTh></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel=@StringLocalizer["Name"]>@context.Name</MudTd>
+        <MudTd DataLabel=@StringLocalizer["Device Name"]>@context.DeviceName</MudTd>
+        <MudTd DataLabel=@StringLocalizer["Model"]>@context.Model</MudTd>
+        <MudTd DataLabel=@StringLocalizer["Serial Number"]>@context.SerialNumber</MudTd>
+        <MudTd DataLabel=@StringLocalizer["Mac Address"]>@context.MacAddress</MudTd>
+        <MudTd DataLabel=@StringLocalizer["State"]>
+            <MudChip Label="true" Color="@(context.State == DeviceState.Online ? Color.Success : Color.Error)">@context.State</MudChip>
+        </MudTd>
+        <MudTd DataLabel=@StringLocalizer["Action"] Style="text-align: end;" Class="pe-2">
+            <MudStack Row="true" Justify="Justify.FlexEnd" AlignItems="AlignItems.Center">
+                <MudButton DisableElevation="true" Size="Size.Small" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Person" OnClick="@(async () => await ExecuteUploadEmployeesAsync(context))" Color="Color.Success">
+                    @StringLocalizer["Import Employees"]
+                </MudButton>
+                <MudMenu AnchorOrigin="Origin.BottomRight" Icon="@Icons.Material.Filled.MoreVert" Dense="true" Disabled="true"/>
+            </MudStack>
+        </MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager HideRowsPerPage="true" InfoFormat="{first_item}-{last_item} / {all_items}" />
+    </PagerContent>
+</MudTable>
+
+@code
+{
+    [InjectComponentService(nameof(DevicesTableComponentService))]
+    private MudTable<DeviceDto>? devicesTable;
+}

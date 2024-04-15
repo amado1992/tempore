@@ -1,0 +1,178 @@
+#####################################################
+# TYE CONFIGURATION
+#####################################################
+
+name: tempore
+
+#####################################################
+# SERVICES
+#####################################################
+
+services:
+
+#----------------------------------------------------
+# tempore-auth-storage
+#----------------------------------------------------
+- name: tempore-auth-storage
+  image: postgres:14.6
+  bindings:
+  - port: 5001
+    containerPort: 5432
+    protocol: tcp
+  env:
+  - name: POSTGRES_USER
+    value: sa
+  - name: POSTGRES_PASSWORD
+    value: tempore-123!
+  - name: POSTGRES_DB
+    value: keycloak
+ # TODO: Create database on boot instead this.
+  volumes:
+  - name: tempore-auth-storage-postgres-data
+    target: /var/lib/postgresql/data
+
+#----------------------------------------------------
+# tempore-storage
+#----------------------------------------------------
+- name: tempore-storage
+  image: postgres:14.6
+  bindings:
+  - port: 5002
+    containerPort: 5432
+    protocol: tcp
+  env:
+  - name: POSTGRES_USER
+    value: sa
+  - name: POSTGRES_PASSWORD
+    value: tempore-123!
+  - name: POSTGRES_DB
+    value: tempore
+ # TODO: Create database on boot instead this.
+  volumes:
+  - name: tempore-storage-postgres-data
+    target: /var/lib/postgresql/data
+
+#----------------------------------------------------
+# tempore-auth
+#----------------------------------------------------
+- name:  tempore-keycloak
+  image: quay.io/keycloak/keycloak:21.0.1
+  args: start-dev
+  bindings:
+  - port: 5003
+    containerPort: 8080
+    protocol: http
+  env:
+  - name: DEV_TEST
+    value: true
+  - name: VERBOSE_LOGGING
+    value: true
+  - name: DISABLE_TRUST_STORE
+    value: true
+  - name: KEYCLOAK_ADMIN
+    value: admin
+  - name: KEYCLOAK_ADMIN_PASSWORD
+    value: tempore-123!
+  - name: KC_DB
+    value: postgres
+  - name: KC_DB_URL_HOST
+    value: host.docker.internal
+  - name: KC_DB_URL_PORT
+    value: 5001
+  - name: KC_DB_URL_DATABASE
+    value: keycloak
+  - name: KC_DB_USERNAME
+    value: sa
+  - name: KC_DB_PASSWORD
+    value: tempore-123!
+  - name: KC_TRANSACTION_XA_ENABLED   
+    value: false
+  - name: KC_HOSTNAME_STRICT
+    value: false
+  - name: KC_HTTP_ENABLED
+    value: true
+  - name: KC_HTTP_PORT
+    value: 8080
+  - name: KC_HTTP_RELATIVE_PATH
+    value: /auth
+  - name: KC_PROXY
+    value: passthrough
+  - name: QUARKUS_HTTP_LIMITS_MAX_HEADER_SIZE
+    value: 128K
+  - name: QUARKUS_HTTP_LIMITS_MAX_INITIAL_LINE_LENGTH
+    value: 8192
+  volumes:
+  - name: tempore-auth-data
+    target: /opt/keycloak/standalone/data/
+
+#----------------------------------------------------
+# tempore-server
+#----------------------------------------------------
+
+- name: tempore-server
+  project: ../../src/Tempore.Server/Tempore.Server.csproj
+  buildProperties: 
+  - name: Configuration
+    value: Debug
+  bindings:
+  - port: 5000
+    containerPort: 7206
+    protocol: https
+  env:
+  - name: ASPNETCORE_ENVIRONMENT
+    value: Development
+  - name: TMP_CONNECTIONSTRINGS_APPLICATIONDATABASE
+    value: User ID=sa;Password=tempore-123!;Host=localhost;Port=5002;Database=tempore;Pooling=true
+  - name: TMP_IDENTITYSERVER_AUTHORITY
+    value: http://localhost:5003/auth/realms/master
+  - name: TMP_IDENTITYSERVER_USERNAME
+    value: admin
+  - name: TMP_IDENTITYSERVER_PASSWORD
+    value: tempore-123!
+  - name: TMP_IDENTITYSERVER_ALLOWUNTRUSTEDCERTIFICATES
+    value: true
+  - name: TMP_IDENTITYSERVER_APPINGRESS
+    value: https://localhost:5000
+  - name: TMP_IDENTITYSERVER_APPUSERNAME
+    value: tempore
+  - name: TMP_IDENTITYSERVER_APPPASSWORD
+    value: tempore-123!  
+  - name: TMP_IDENTITYSERVER_ACCESSTOKENEXPIRINGNOTIFICATIONTIMEINSECONDS
+    value: 10
+  - name: TMP_IDENTITYSERVER_TIMEFORUSERINACTIVITYAUTOMATICSIGNOUT
+    value: 300000
+  - name: TMP_IDENTITYSERVER_TIMEFORUSERINACTIVITYNOTIFICATION
+    value: 100000
+
+#----------------------------------------------------
+# tempore-agent
+#----------------------------------------------------
+
+- name: tempore-agent
+  project: ../../src/Tempore.Agent/Tempore.Agent.csproj
+  buildProperties: 
+  - name: Configuration
+    value: Debug
+  env:
+  - name: ASPNETCORE_ENVIRONMENT
+    value: Development
+  - name: TMP_IDENTITYSERVER_AUTHORITY 
+    value: http://localhost:5003/auth/realms/master
+  - name: TMP_IDENTITYSERVER_AGENTSECRET 
+    value: s383DmpxBSuENMxAN1dh8qsftLrxmtoI
+  - name: TMP_AGENTNAME 
+    value: Main Agent
+  - name: TMP_SERVER 
+    value: https://localhost:5000
+  - name: TMP_DEVICES_0_NAME 
+    value: Main Door
+  - name: TMP_DEVICES_0_IPADDRESS 
+    value: 192.168.1.5
+  - name: TMP_DEVICES_0_USERNAME 
+    value: admin
+  - name: TMP_DEVICES_0_PASSWORD 
+    value: h1kv1s1on123
+  - name: TMP_DEVICES_0_FIRSTDATEONLINE 
+    value: 1/1/2023
+  - name: TMP_DEVICES_0_SYNCHRONIZETIME 
+    value: true

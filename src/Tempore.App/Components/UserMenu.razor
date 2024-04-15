@@ -1,0 +1,29 @@
+﻿@using Tempore.App.Extensions
+
+@inherits ComponentBase
+
+<MudMenu Class="ml-2" AnchorOrigin="Origin.TopRight">
+    <ActivatorContent>
+        <MudAvatar Rounded="true" Size="Size.Medium" Color="Color.Info" Style="border-radius: 20px">@User?.Profile?.GetInitials(2)</MudAvatar>
+    </ActivatorContent>
+    <ChildContent>
+        <MudCard Elevation="0" Square="true" Style="width: 350px">
+            <MudCardHeader style="padding:10px!important">
+                <CardHeaderAvatar>
+                    <MudAvatar Rounded="true" Size="Size.Medium" Color="Color.Info" Style="border-radius: 20px">@User?.Profile?.GetInitials(2)</MudAvatar>
+                </CardHeaderAvatar>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.body1">@User?.Profile?.GetNameOrPreferredUsername()</MudText>
+                    @if (!string.IsNullOrWhiteSpace(User?.Profile?.Email))
+                    {
+                        <MudText Typo="Typo.caption">@User?.Profile?.Email</MudText>
+                    }
+                </CardHeaderContent>
+            </MudCardHeader>
+        </MudCard>
+        <MudDivider/>
+        <MudMenuItem OnClick="SignOutAsync" Icon="@Icons.Material.Filled.Logout">
+            @StringLocalizer!["Sign out"]
+        </MudMenuItem>
+    </ChildContent>
+</MudMenu>

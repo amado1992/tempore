@@ -1,0 +1,32 @@
+#####################################################
+# TYE CONFIGURATION
+#####################################################
+
+name: tempore
+
+#####################################################
+# SERVICES
+#####################################################
+
+services:
+
+#----------------------------------------------------
+# tempore-storage
+#----------------------------------------------------
+- name: tempore-storage
+  image: postgres:14.6
+  bindings:
+  - port: 5002
+    containerPort: 5432
+    protocol: tcp
+  env:
+  - name: POSTGRES_USER
+    value: sa
+  - name: POSTGRES_PASSWORD
+    value: tempore-123!
+  - name: POSTGRES_DB
+    value: tempore
+ # TODO: Create database on boot instead this.
+  volumes:
+  - name: tempore-storage-postgres-data
+    target: /var/lib/postgresql/data

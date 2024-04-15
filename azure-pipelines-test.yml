@@ -1,0 +1,54 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- develop
+
+# pool:
+#  vmImage: ubuntu-latest
+
+steps:
+- task: UseDotNet@2
+  displayName: Use .NET 6.0
+  inputs:
+    packageType: 'sdk'
+    version: '6.0.x'
+
+- script: dotnet tool restore
+  displayName: 'Restore Tools'
+
+- script: dotnet cake --target=UpdateVersion
+  displayName: 'GitVersion'
+
+- script: dotnet cake --target=UnitTest --Configuration=Debug
+  displayName: 'Unit Test'
+
+- script: dotnet cake --target=IntegrationTest --Configuration=Debug
+  displayName: 'Integration Test'
+
+- task: PublishTestResults@2
+  displayName: 'Publish Test Results'
+  inputs:
+    testRunner: VSTest
+    configuration: Debug
+    testResultsFiles: 'src/Tempore.Tests/**/*.trx'
+    failTaskOnFailedTests: true
+    publishRunAttachments: false
+    
+- task: reportgenerator@5
+  displayName: 'Merging Coverage Results'
+  inputs:
+    reports: 'src/Tempore.Tests/coverage.unit.xml;src/Tempore.Tests/coverage.integration.xml'
+    targetdir: 'output/coverage/coverlet'
+    sourcedirs: 'src'
+    reporttypes: "Cobertura"
+    verbosity: "Verbose"
+
+- task: PublishCodeCoverageResults@1
+  displayName: 'Publish Coverage Results'
+  inputs:
+    codeCoverageTool: 'Cobertura'
+    summaryFileLocation: 'output/coverage/coverlet/Cobertura.xml'
+    pathToSources: 'src'

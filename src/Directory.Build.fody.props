@@ -1,0 +1,16 @@
+<Project>
+  <!-- 
+    This file applies to all projects automatically and defines all default analyzers. Project specific values should go into Directory.Build.project.props
+  -->
+	<ItemGroup>
+	        <PackageReference Include="Fody" Version="6.8.0" PrivateAssets="all">
+	            <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+	        </PackageReference>
+	        <PackageReference Include="MethodTimer.Fody" Version="3.2.2" PrivateAssets="all" />
+                <PackageReference Include="Serilog" Version="2.12.0" />
+	</ItemGroup>
+	
+	<ItemGroup>
+		<Compile Include="$(MSBuildThisFileDirectory)MethodTimeLogger.cs" Link="MethodTimeLogger.cs" />
+	</ItemGroup>
+</Project>

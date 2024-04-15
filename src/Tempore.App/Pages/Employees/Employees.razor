@@ -1,0 +1,99 @@
+﻿@using Blorc.Attributes;
+@using Microsoft.AspNetCore.Authorization;
+@using Tempore.Authorization.Roles;
+@using Tempore.Client;
+
+@attribute [Authorize(Policy = Roles.Employees.Viewer)]
+@inherits Blorc.Components.BlorcComponentBase
+
+<PageTitle>@StringLocalizer!["Employees"]</PageTitle>
+
+@{
+    var items = new List<BreadcrumbItem>
+                    {
+                        new(StringLocalizer!["Home"], Routes.Home.Index),
+                        new(StringLocalizer["Employees"], null, true),
+                        new(StringLocalizer["Employees"], null, true),
+                    };
+}
+
+<MudBreadcrumbs Items="items" Style="margin-left: -10px" />
+
+<MudText Typo="Typo.h6">@StringLocalizer["Employees"]</MudText>
+<MudText Typo="Typo.caption">@StringLocalizer["Shows a list of employees"]</MudText>
+
+<MudPaper Class="d-flex flex-row-reverse flex-grow-1 gap-4" Elevation="0">
+    <MudButton OnClick="RefreshTables" DisableElevation Variant="Variant.Filled" Color="Color.Success" Size="Size.Small" Target="_blank" StartIcon="@Icons.Material.Filled.Refresh" Disabled="false" Style="height: 30px !important;">
+        @StringLocalizer["Refresh"]
+    </MudButton>
+</MudPaper>
+
+<MudGrid>
+
+    <MudItem xs="12" md="12" lg="12" xl="12">
+        <div class="d-flex justify-end flex-grow-1 gap-4">
+            <div style="width: 333px;">
+                <MudTextField @bind-Value="SearchTextEmployee" Placeholder="@StringLocalizer["Filter"]" Variant="Variant.Text"></MudTextField>
+            </div>
+
+            <div>
+                <MudButton OnClick="ApplyFilterEmployee" DisableElevation Variant="Variant.Filled" Color="Color.Success" Size="Size.Small" Target="_blank" StartIcon="@Icons.Material.Filled.FilterAlt" Disabled="false" Style="height: 30px !important; margin-top: 24px !important">
+                    @StringLocalizer["Apply filter"]
+                </MudButton>
+
+                <MudButton OnClick="ClearFilterEmployee" DisableElevation Variant="Variant.Filled" Color="Color.Error" Size="Size.Small" Target="_blank" StartIcon="@Icons.Material.Filled.Clear" Disabled="false" Style="height: 30px !important; margin-top: 24px !important">
+                    @StringLocalizer["Clear"]
+                </MudButton>
+            </div>
+        </div>
+    </MudItem>
+
+    <MudItem xs="12" md="12" lg="12" xl="12">
+        <MudTable @ref="_employeesTable" T="EmployeeDto" Dense="true" Bordered="true" Striped="true" Hover="true" ServerData="GetEmployeesAsync">
+            <ToolBarContent>
+                <MudText Typo="Typo.h6">@StringLocalizer["Employees"]</MudText>
+            </ToolBarContent>
+
+            <HeaderContent>
+                <MudTh>@StringLocalizer["Code"]</MudTh>
+                <MudTh>@StringLocalizer["Name"]</MudTh>
+                <MudTh>@StringLocalizer["Identification card"]</MudTh>
+                <MudTh>@StringLocalizer["Social security"]</MudTh>
+                <MudTh>@StringLocalizer["Department"]</MudTh>
+                <MudTh>@StringLocalizer["Actions"]</MudTh>
+            </HeaderContent>
+
+            <RowTemplate>
+                <MudTd DataLabel=@StringLocalizer["Code"]>@context.ExternalId</MudTd>
+                <MudTd DataLabel=@StringLocalizer["Name"]>
+                    @context.FullName
+                </MudTd>
+                <MudTd DataLabel=@StringLocalizer["Identification card"]>
+                    @context.IdentificationCard
+                </MudTd>
+                <MudTd DataLabel=@StringLocalizer["Social security"]>
+                    @context.SocialSecurity
+                </MudTd>
+                <MudTd DataLabel=@StringLocalizer["Department"]>
+                    @context.Department
+                </MudTd>
+
+                <MudTd DataLabel=@StringLocalizer["Actions"]>
+                    <MudButton OnClick="@(() => EmployeeDetails(context?.Id))" Style="margin-left: 0px;" DisableElevation Variant="Variant.Filled" Color="Color.Success" Size="Size.Small" Target="_blank" StartIcon="@Icons.Material.Filled.Details">
+                        @StringLocalizer["Details"]
+                    </MudButton>
+                </MudTd>
+            </RowTemplate>
+
+            <PagerContent>
+                <MudTablePager HideRowsPerPage="true" InfoFormat="{first_item}-{last_item} / {all_items}" />
+            </PagerContent>
+        </MudTable>
+    </MudItem>
+</MudGrid>
+
+@code
+{
+    [InjectComponentService(nameof(EmployeesTableComponentService))]
+    private MudTable<EmployeeDto>? _employeesTable;
+}

@@ -1,0 +1,49 @@
+﻿@using Tempore.App.Extensions
+@using Blorc.Attributes
+@using System.Globalization
+
+@inherits Blorc.Components.BlorcComponentBase
+
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            @if (!string.IsNullOrWhiteSpace(Icon))
+            {
+                <MudIcon Icon="@Icon" Size="Size.Small" Class="mr-3 mb-n1" />
+            }
+            @StringLocalizer?["Assign employee to shift"]
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudForm @ref="_form" Disabled="ReadOnly" ReadOnly="ReadOnly" Model="@ViewModel" Validation="@(Validator!.ValidateValue())" ValidationDelay="0">
+            <MudGrid>
+                <MudItem xs="12" sm="12">
+                    <MudDatePicker Editable="true" @bind-Date="ViewModel!.StartDate" Label="@StringLocalizer!["Start date"]" Clearable="true" For="@(() => ViewModel!.StartDate)" Validation="@(Validator!.ValidateValue())"/>
+                </MudItem>
+
+                <MudItem xs="12" sm="12">
+                    <MudDatePicker Editable="true" @bind-Date="ViewModel!.ExpireDate" Label="@StringLocalizer!["Expire date"]" Clearable="true" For="@(() => ViewModel!.ExpireDate)" Validation="@(Validator!.ValidateValue())"/>
+                </MudItem>
+
+                <MudItem xs="12" sm="12">
+                    <MudNumericField Label="@StringLocalizer!["Effective working time"]" @bind-Value="ViewModel!.EffectiveWorkingHours" Variant="Variant.Text" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Schedule" AdornmentColor="Color.Default"
+                                     For="@(() => ViewModel!.EffectiveWorkingHours)" Format="N2" Culture="CultureInfo.InvariantCulture"/>
+                </MudItem>
+            </MudGrid>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel" StartIcon="@Icons.Material.Filled.Close">@StringLocalizer?["Cancel"]</MudButton>
+        <MudButton OnClick="ConfirmAsync" StartIcon="@Icons.Material.Filled.Save" Variant="Variant.Filled" Color="Color.Primary">@StringLocalizer!["Save"]</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code
+{
+    [InjectComponentService(nameof(MudFormComponentService))]
+    private MudForm? _form;
+
+    [CascadingParameter]
+    [InjectComponentService(nameof(MudDialogInstanceComponentService))]
+    private MudDialogInstance? _dialogInstance { get; set; }
+}                                     

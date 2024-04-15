@@ -1,0 +1,42 @@
+﻿{
+  "profiles": {
+    "Tempore.Agent (Tye / Postgres / Sever)": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "applicationUrl": "https://localhost:7207;http://localhost:5080",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "APP_INSTANCE": "0",
+        "TMP_IDENTITYSERVER_AUTHORITY": "http://localhost:5003/auth/realms/master",
+        "TMP_IDENTITYSERVER_AGENTSECRET": "s383DmpxBSuENMxAN1dh8qsftLrxmtoI",
+        "TMP_AGENTNAME": "Main Agent",
+        "TMP_SERVER": "https://localhost:5000",
+        "TMP_DEVICES_0_NAME": "Main Door",
+        "TMP_DEVICES_0_IPADDRESS": "192.168.1.8",
+        "TMP_DEVICES_0_USERNAME": "admin",
+        "TMP_DEVICES_0_PASSWORD": "h1kv1s1on123",
+        "TMP_DEVICES_0_FIRSTDATEONLINE": "1/1/2023",
+        "TMP_DEVICES_0_SYNCHRONIZETIME": "true"
+      }
+    },
+    "Tempore.Agent (Tye / Postgres)": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "applicationUrl": "https://localhost:7207;http://localhost:5080",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "APP_INSTANCE": "0",
+        "TMP_IDENTITYSERVER_AUTHORITY": "http://localhost:5003/auth/realms/master",
+        "TMP_IDENTITYSERVER_AGENTSECRET": "s383DmpxBSuENMxAN1dh8qsftLrxmtoI",
+        "TMP_AGENTNAME": "Main Agent",
+        "TMP_SERVER": "https://localhost:7206",
+        "TMP_DEVICES_0_NAME": "Main Door",
+        "TMP_DEVICES_0_IPADDRESS": "192.168.1.8",
+        "TMP_DEVICES_0_USERNAME": "admin",
+        "TMP_DEVICES_0_PASSWORD": "h1kv1s1on123",
+        "TMP_DEVICES_0_FIRSTDATEONLINE": "1/1/2023",
+        "TMP_DEVICES_0_SYNCHRONIZETIME": "true"
+      }
+    }
+  }
+}

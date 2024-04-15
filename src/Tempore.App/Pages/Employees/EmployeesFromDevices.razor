@@ -1,0 +1,113 @@
+﻿@using Blorc.Attributes;
+@using Microsoft.AspNetCore.Authorization;
+@using Tempore.App.Models
+@using Tempore.Authorization.Roles;
+@using Tempore.Client;
+
+@attribute [Authorize(Policy = Roles.Employees.Viewer)]
+@inherits Blorc.Components.BlorcComponentBase
+
+<PageTitle>@StringLocalizer!["Employees from devices"]</PageTitle>
+
+@{
+    var items = new List<BreadcrumbItem>
+                    {
+                        new(StringLocalizer!["Home"], Routes.Home.Index),
+                        new(StringLocalizer["Employees"], null, true),
+                        new(StringLocalizer["Employees from devices"], null, true),
+                    };
+}
+
+<MudBreadcrumbs Items="items" Style="margin-left: -10px" />
+
+<MudText Typo="Typo.h6">@StringLocalizer["Employees from devices"]</MudText>
+<MudText Typo="Typo.caption">@StringLocalizer["Shows a list of employees from devices"]</MudText>
+
+<MudPaper Class="d-flex flex-row-reverse flex-grow-1 gap-4" Elevation="0">
+    <MudButton OnClick="RefreshTables" DisableElevation Variant="Variant.Filled" Color="Color.Success" Size="Size.Small" Target="_blank" StartIcon="@Icons.Material.Filled.Refresh" Disabled="false" Style="height: 30px !important;">
+        @StringLocalizer["Refresh"]
+    </MudButton>
+</MudPaper>
+
+<div class="d-flex justify-end flex-grow-1 gap-4">
+    <div style="margin-right: -40px;">
+        <MudGrid>
+            <MudItem xs="12" md="12" lg="6" xl="6">
+                <MudSelect @bind-Value="IsLinked" Placeholder="@StringLocalizer["Select state"]">
+                    @foreach (var state in EmployeeFromDeviceLinkState.All)
+                    {
+                        <MudSelectItem Value="@state.Value">@StringLocalizer[state.Text]</MudSelectItem>
+                    }
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12" sm="12" md="12" lg="6" xl="6">
+            </MudItem>
+
+            <MudItem xs="12" sm="12" md="12" lg="6" xl="6">
+                <MudTextField @bind-Value="SearchTextEmployeeFromDevice" Placeholder="@StringLocalizer["Filter"]" Variant="Variant.Text"></MudTextField>
+            </MudItem>
+            <MudItem xs="12" sm="12" md="12" lg="6" xl="6">
+                <MudButton OnClick="ApplyFilterEmployeeFromDevice" DisableElevation Variant="Variant.Filled" Color="Color.Success" Size="Size.Small" Target="_blank" StartIcon="@Icons.Material.Filled.FilterAlt" Disabled="false" Style="height: 30px !important; margin-top: 24px !important">
+                    @StringLocalizer["Apply filter"]
+                </MudButton>
+
+                <MudButton OnClick="ClearFilterEmployeeFromDevice" DisableElevation Variant="Variant.Filled" Color="Color.Error" Size="Size.Small" Target="_blank" StartIcon="@Icons.Material.Filled.Clear" Disabled="false" Style="height: 30px !important; margin-top: 24px !important">
+                    @StringLocalizer["Clear"]
+                </MudButton>
+            </MudItem>
+        </MudGrid>
+    </div>
+</div>
+
+<MudGrid>
+    <MudItem xs="12" md="12" lg="12" xl="12">
+        <MudTable @ref="_employeesFromDevicesTable" T="EmployeeFromDeviceDto" Dense="true" Bordered="true" Striped="true" Class="my-4" Hover="true" ServerData="GetEmployeesFromDevicesAsync">
+
+            <ToolBarContent>
+                <MudText Typo="Typo.h6">@StringLocalizer["Employees from devices"]</MudText>
+            </ToolBarContent>
+
+            <HeaderContent>
+                <MudTh>@StringLocalizer["Code"]</MudTh>
+                <MudTh>@StringLocalizer["Name"]</MudTh>
+                <MudTh>@StringLocalizer["State"]</MudTh>
+                <MudTh>@StringLocalizer["Actions"]</MudTh>
+            </HeaderContent>
+
+            <RowTemplate>
+                <MudTd DataLabel=@StringLocalizer["Code"]>@context.EmployeeIdOnDevice</MudTd>
+                <MudTd DataLabel=@StringLocalizer["Name"]>
+                    @context.FullName
+                </MudTd>
+                <MudTd DataLabel=@StringLocalizer["State"]>
+                    @if (context.EmployeeId is not null)
+                    {
+                        <MudChip Style="margin-left: 0px;" Label="true" Color="Color.Success">@StringLocalizer["Linked"]</MudChip>
+                    }
+                    else
+                    {
+                        <MudChip Style="margin-left: 0px;" Label="true" Color="Color.Error">@StringLocalizer["Unlinked"]</MudChip>
+                    }
+                </MudTd>
+                <MudTd DataLabel=@StringLocalizer["Actions"] Style="@(selectedEmployeeFromDevice?.Id == context.Id ? $"background: #2196f3;" : $"background: none;")">
+                    @if (context.EmployeeId is not null)
+                    {
+                        <MudButton OnClick="@(() => EmployeeDetails(context?.EmployeeId))" Style="margin-left: 2px;" DisableElevation Variant="Variant.Filled" Color="Color.Success" Size="Size.Small" Target="_blank" StartIcon="@Icons.Material.Filled.Details">
+                            @StringLocalizer["Details"]
+                        </MudButton>
+                    }
+                </MudTd>
+            </RowTemplate>
+            <PagerContent>
+                <MudTablePager HideRowsPerPage="true" InfoFormat="{first_item}-{last_item} / {all_items}" />
+            </PagerContent>
+        </MudTable>
+    </MudItem>
+</MudGrid>
+
+@code
+{
+    [InjectComponentService(nameof(EmployeesFromDevicesTableComponentService))]
+    private MudTable<EmployeeFromDeviceDto>? _employeesFromDevicesTable;
+}

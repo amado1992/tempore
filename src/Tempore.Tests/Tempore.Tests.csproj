@@ -1,0 +1,85 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<IsPackable>false</IsPackable>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Remove="TestResults\**" />
+		<EmbeddedResource Remove="TestResults\**" />
+		<None Remove="TestResults\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Remove="TestResults.*trx" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Remove="coverage.integration.xml" />
+		<None Remove="coverage.unit.xml" />
+		<None Remove="Resources\employees-missing-code.xlsx" />
+		<None Remove="Resources\employees-missing-fullname.xlsx" />
+		<None Remove="Resources\employees-missing-optional-columns-exchanged-columns-positions.xlsx" />
+		<None Remove="Resources\employees-missing-optional-columns.xlsx" />
+		<None Remove="Resources\employees.xlsx" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="Resources\employees-missing-code.xlsx" />
+		<EmbeddedResource Include="Resources\employees-missing-fullname.xlsx" />
+		<EmbeddedResource Include="Resources\employees-missing-optional-columns-exchanged-columns-positions.xlsx" />
+		<EmbeddedResource Include="Resources\employees-missing-optional-columns.xlsx" />
+		<EmbeddedResource Include="Resources\employees.xlsx" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Bogus" Version="34.0.2" />
+		<PackageReference Include="bunit" Version="1.25.3" />
+		<PackageReference Include="FluentAssertions" Version="6.12.0" />
+		<PackageReference Include="MethodDecorator.Fody" Version="1.1.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.24" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.1" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
+		<PackageReference Include="Moq" Version="4.20.69" />
+		<PackageReference Include="TestEnvironment.Docker" Version="2.1.5" />
+		<PackageReference Include="xunit" Version="2.6.1" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="2.5.3">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="coverlet.collector" Version="6.0.0">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="coverlet.msbuild" Version="6.0.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Tempore.Agent\Tempore.Agent.csproj">
+			<Aliases>TemporeAgent</Aliases>
+		</ProjectReference>
+		<ProjectReference Include="..\Tempore.Authorization\Tempore.Authorization.csproj" />
+		<ProjectReference Include="..\Tempore.Hosting\Tempore.Hosting.csproj" />
+		<ProjectReference Include="..\Tempore.Server\Tempore.Server.csproj">
+			<Aliases>TemporeServer</Aliases>
+		</ProjectReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="appsettings.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Tempore.Processing.PayDay\Services\WorkforceMetricCalculators\" />
+	</ItemGroup>
+
+	<PropertyGroup>
+		<NoWarn>$(NoWarn);CS1591;CS1573;SA1600;SA1601;SA1611;SA1633;xUnit1026</NoWarn>
+		<NoError>$(NoError);CS1591;CS1573;SA1600;SA1601;SA1611;SA1633;xUnit1026</NoError>
+	</PropertyGroup>
+</Project>

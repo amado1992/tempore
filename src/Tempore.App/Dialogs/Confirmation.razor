@@ -1,0 +1,28 @@
+﻿@using Blorc.Attributes
+
+@inherits Blorc.Components.BlorcComponentBase
+
+<MudDialog IsVisible="true">
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            @if (!string.IsNullOrWhiteSpace(Icon))
+            {
+                <MudIcon Icon="@Icon" Size="Size.Small" Class="mr-3 mb-n1" />
+            }
+            @StringLocalizer?["Confirm"]
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudText>@ContentText</MudText>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">@StringLocalizer?["Cancel"]</MudButton>
+        <MudButton Color="@Color" Variant="Variant.Filled" OnClick="Confirm">@ButtonText</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code{
+    [CascadingParameter]
+    [InjectComponentService(nameof(MudDialogInstanceComponentService))]
+    private MudDialogInstance? _dialogInstance { get; set; }
+}

@@ -1,0 +1,19 @@
+﻿@using Tempore.App.Pages
+
+@inherits Blorc.Components.BlorcComponentBase
+
+<MudNavMenu Bordered="true" Color="Color.Info" Class="mud-width-full" Margin="Margin.Dense">
+    <MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">@StringLocalizer!["Home"]</MudNavLink>
+    <MudNavGroup Title="@StringLocalizer!["Employees"]" Icon="@Icons.Material.Filled.People" Expanded="IsEmployeesGroupExpanded">
+        <MudNavLink Href=@Routes.Employees.ImportFromFiles.ImportFromFile Icon="@Icons.Material.Filled.FilePresent">@StringLocalizer["Import from files"]</MudNavLink>
+        <MudNavLink Href=@Routes.Employees.ImportFromDevices.Agents Icon="@Icons.Material.Filled.Devices">@StringLocalizer["Import from devices"]</MudNavLink>
+        <MudNavLink Href=@Routes.Employees.LinkEmployees Icon="@Icons.Material.Filled.Link">@StringLocalizer["Link employees"]</MudNavLink>
+    </MudNavGroup>
+    <MudNavGroup Title="@StringLocalizer["Time & attendance"]" Icon="@Icons.Material.Filled.LockClock" Expanded="IsTimeAndAttendanceGroupExpanded">
+        <MudNavLink Icon="@Icons.Material.Filled.Timer" Disabled="true">@StringLocalizer["Timetables"]</MudNavLink>
+        <MudNavLink Href=@Routes.TimeAndAttendance.Shifts Icon="@Icons.Material.Filled.Schedule">@StringLocalizer["Shifts"]</MudNavLink>
+    </MudNavGroup>
+    <MudNavGroup Title="@StringLocalizer["Analytics"]" Icon="@Icons.Material.Filled.AreaChart" Expanded="IsAnalyticsGroupExpanded">
+        <MudNavLink Href=@Routes.Analytics.WorkforceMetrics Icon="@Icons.Material.Filled.WorkHistory">@StringLocalizer["Workforce metrics"]</MudNavLink>
+    </MudNavGroup>
+</MudNavMenu>
